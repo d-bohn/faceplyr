@@ -1,7 +1,7 @@
 Package: faceplyr
-Title: Functions for Face Image Analysis in R
+Title: Tools for Facial Image Analysis in R
 Version: 0.0.0.9000
-Authors@R: Daniel Albohn, dna5021@psu.edu, aut cre
+Authors: Daniel Albohn, dna5021@psu.edu, aut cre
 Description: A suite of R functions for dealing with face images.
 Depends: R (>= 3.5.1)
 License: GPL-3

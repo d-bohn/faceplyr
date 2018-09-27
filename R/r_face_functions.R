@@ -334,7 +334,7 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
 }
 
 
-#' At a 69th point to face template
+#' Add a 69th point to face template
 #'
 #' @param template
 #' @param write_out
@@ -383,7 +383,6 @@ add_face_point <- function(template, write_out = c('tem','console')) {
     tem <- landmarks_to_tem(landmarks = landmarks, write_out = FALSE)
     return(tem)
   }
-
 }
 
 
