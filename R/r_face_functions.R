@@ -373,15 +373,13 @@ add_face_point <- function(template, write_out = c('tem','console')) {
   newx <- x8
   newy <- round(y8-face_height,0)
 
-  if (!write_out & ("from_tem" %in% class(landmarks))) {
-    return(c(x = newx, y = newy))
-  } else if (write_out == 'tem' & ("from_tem" %in% class(landmarks))) {
+  if (write_out == 'tem' & ("from_tem" %in% class(landmarks))) {
     landmarks <- rbind(landmarks, c(68, newx, newy))
     landmarks_to_tem(landmarks = landmarks, write_out = TRUE, savename = template)
   } else if (write_out == 'console' & ("from_tem" %in% class(landmarks))) {
-    landmarks <- rbind(landmarks, c(68, newx, newy))
-    tem <- landmarks_to_tem(landmarks = landmarks, write_out = FALSE)
-    return(tem)
+      landmarks <- rbind(landmarks, c(68, newx, newy))
+      tem <- landmarks_to_tem(landmarks = landmarks, write_out = FALSE)
+      return(tem)
   }
 }
 
