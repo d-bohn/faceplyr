@@ -8,7 +8,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-requires: quantIm,
+imports: quantIm,
           EBImage,
           jsonlite,
           readr,
