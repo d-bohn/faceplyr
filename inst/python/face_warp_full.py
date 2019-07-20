@@ -49,7 +49,7 @@ import numpy
 
 import sys
 
-PREDICTOR_PATH = "/Library/Frameworks/R.framework/Versions/3.5/Resources/library/quantIm/extdata/shape_predictor_68_face_landmarks.dat"
+PREDICTOR_PATH = "/Library/Frameworks/R.framework/Versions/3.5/Resources/library/faceplyr/extdata/shape_predictor_68_face_landmarks.dat"
 SCALE_FACTOR = 1
 FEATHER_AMOUNT = 11
 

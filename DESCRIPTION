@@ -1,17 +1,19 @@
 Package: faceplyr
 Title: Tools for Facial Image Analysis in R
-Version: 0.0.0.9000
+Version: 0.0.0.911
 Authors: Daniel Albohn, dna5021@psu.edu, aut cre
 Description: A suite of R functions for dealing with face images.
 Depends: R (>= 3.4.1)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
-imports: quantIm,
-          EBImage,
-          jsonlite,
-          readr,
-          reticulate,
-          tools,
-          vegan
+RoxygenNote: 6.1.1
+imports:  
+    EBImage,
+    jsonlite,
+    readr,
+    reticulate,
+    tools,
+    vegan
+suggests:
+    quantIm

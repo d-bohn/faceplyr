@@ -2,7 +2,7 @@
 % Please edit documentation in R/r_face_functions.R
 \name{add_face_point}
 \alias{add_face_point}
-\title{At a 69th point to face template}
+\title{Add a 69th point to face template}
 \usage{
 add_face_point(template, write_out = c("tem", "console"))
 }
@@ -14,7 +14,7 @@ Face coordinates with 69 (instead of 68) face points. Can
 be returned as a .tem for JPsychomorph.
 }
 \description{
-At a 69th point to face template
+Add a 69th point to face template
 }
 \details{
 The 69th point is estimated to be at the top of the head,
