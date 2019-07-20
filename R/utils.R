@@ -53,14 +53,13 @@ resize_points <- function(coords, image, width, height){
   return(coords <- cbind(coords,d))
 }
 
-#' @export
 # Plot face land marks ----
-plot_landmarks <- function(landmarks=NULL, image, save=NULL){
+plot_landmarks_old <- function(landmarks=NULL, image, save=NULL) {
 
-  if (isFALSE(hasArg(landmarks))) {
-    landmarks <- quantIm::read_landmarks(image)[c('point','x','y')]
-  } else {
-    landmarks <- landmarks[c('point','x','y')]
+  if (hasArg(landmarks) & hasArg(image)) {
+    landmarks <- faceplyr::read_landmarks(landmarks)
+  } else (!(hasArg(landmarks)) & hasArg(image)) {
+    landmarks <- faceplyr::read_landmarks(image)[c('point','x','y')]
   }
 
   # img <- try(jpeg::readJPEG(image))
@@ -102,14 +101,30 @@ plot_landmarks <- function(landmarks=NULL, image, save=NULL){
   #   )
   # plot
 
-  library(raster);library(dplyr)
+  # library(raster);library(dplyr)
   img <- EBImage::readImage(image)
 
   res = dim(img)[1:2]
   plot(1,1,xlim=c(0,res[1]),ylim=c(res[2],0),asp=1,type='n',xaxs='i',yaxs='i',
        xaxt='n',yaxt='n',xlab='',ylab='',bty='n')
-  rasterImage(img,1,1,res[1],res[2])
-  points(coords[1:2], pch = 20, col='red')
-  points(0,0,col='red',lwd=.5)
+  graphics::rasterImage(img,1,1,res[1],res[2])
+  points(landmarks[2:3], pch = 20, col='red')
+}
 
+#' @export
+plot_landmarks <- function(landmarks=NULL, image, save=NULL) {
+
+  if (hasArg(landmarks) & hasArg(image)) {
+    landmarks <- faceplyr::read_landmarks(landmarks)
+  } else (!(hasArg(landmarks)) & hasArg(image)) {
+    landmarks <- faceplyr::read_landmarks(image)[c('point','x','y')]
+  }
+
+  img <- EBImage::readImage(image)
+
+  res = dim(img)[1:2]
+  plot(1,1,xlim=c(0,res[1]),ylim=c(res[2],0),asp=1,type='n',xaxs='i',yaxs='i',
+       xaxt='n',yaxt='n',xlab='',ylab='',bty='n')
+  graphics::rasterImage(img,1,1,res[1],res[2])
+  points(landmarks[2:3], pch = 20, col='red')
 }

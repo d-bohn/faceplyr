@@ -230,7 +230,9 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
   on.exit(raster::removeTmpFiles(h=2))
 
   if (!hasArg(landmarks)) {
-    coords <- quantIm::read_landmarks(image)
+    coords <- read_landmarks(image)
+  } else {
+    coords <- landmarks
   }
 
   if (points == 'default'){
@@ -248,7 +250,7 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
   coords$y <- as.numeric(as.character(coords$y))
 
   ## Function to estimate center of four points in a rectangle
-  centerC <- function(point1,point2,point3,point4){
+  centerC <- function(point1,point2,point3,point4) {
 
     point1x <- coords$x[coords$point==point1]; point1y <- coords$y[coords$point==point1]
     point2x <- coords$x[coords$point==point2]; point2y <- coords$y[coords$point==point2]
@@ -293,7 +295,7 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
   # magick::image_browse(im)
 
   ## Load and rescale
-  if (rescale==TRUE){
+  if (rescale==TRUE) {
     percent = scale*100
     img <- magick::image_scale(im, paste0(percent,'%'))
     # magick::image_browse(img)
@@ -307,11 +309,12 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
     if (class(attempt1)=='try-error') {
       savename <- paste0(image_sans,'_crop_scale.jpg')
       attempt2 <- try( magick::image_write(img, path = savename, format = "jpg"), silent = TRUE )
+
       if (class(attempt2)=='try-error') message('Please provide an appropriate
                                                 image type to be written.')
     }
 
-    coords_new <- quantIm:::read_landmarks(image = savename)
+    coords_new <- read_landmarks(savename)
 
     coords <- dplyr::bind_cols(coords, coords_new)
 
@@ -324,12 +327,15 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
 
     attempt1 <- try( magick::image_write(im, path = savename, format = "png"), silent = TRUE)
 
-    if (class(attempt1)=='try-error') {
+    if (class(attempt1) == 'try-error') {
       savename <- paste0(image_sans,'_crop.jpg')
+
       attempt2 <- try( magick::image_write(im, path = savename, format = "jpg"), silent = TRUE )
+
       if (class(attempt2)=='try-error') message('Please provide an appropriate
                                                 image type to be written.')
     }
+    return(coords)
   }
 }
 

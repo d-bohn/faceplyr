@@ -35,7 +35,7 @@ read_landmarks.invalid <- function(x, ...) {
 
 #' @export
 read_landmarks.tem <- function(x, ...) {
-  tem_df <- read.delim(x, header = FALSE, sep = ' ', fileEncoding = 'UTF-8')
+  tem_df <- read.delim(x, header = FALSE, sep = ' ', fileEncoding = 'UTF-8', stringsAsFactors = FALSE)
   df <- tem_df[complete.cases(tem_df),]
   colnames(df) <- c('x','y')
   df$point <- seq(0,(nrow(df)-1))
