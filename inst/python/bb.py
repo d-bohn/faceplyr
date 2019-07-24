@@ -190,19 +190,19 @@ class AlignDlib:
 
 def tf_bb(x, landmarks, scale_left=0.10, scale_top=0.10, scale_right = 0.1, scale_bottom = 0.1):
     img = cv2.imread(x, 1)
-          
+
     # Initialize the OpenFace face alignment utility
     alignment = AlignDlib(landmarks)
 
     # Detect face and return bounding box
-    
+
     bb = alignment.getLargestFaceBoundingBox(img)
 
     first = int(bb.left()-(bb.left()*scale_left))
     second = int(bb.top()-(bb.top()*scale_top))
     third = int(bb.right()+(bb.right()*scale_right))
     fourth = int(bb.bottom()+(bb.bottom()*scale_bottom))
-    
+
     return list([first,second,third,fourth])
 
 def tf_crop(x, bb):
@@ -212,5 +212,5 @@ def tf_crop(x, bb):
     crop_img = img[bb_new.top():bb_new.bottom(),bb_new.left():bb_new.right()]
     # crop_img.setflags(write=1)
     # img = crop_img.copy()
-    
+
     return crop_img
