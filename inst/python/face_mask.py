@@ -1,3 +1,8 @@
+import cv2
+import dlib
+import numpy as np
+from imutils import face_utils
+
 def face_remap(shape):
     remapped_image = shape.copy()
     # left eye brow
