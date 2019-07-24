@@ -224,7 +224,9 @@ tem_to_landmarks <- function(tem, write_out = TRUE, savename) {
 #' @export
 #'
 #' @examples
-face_crop_points <- function(landmarks, image, points = 'default', savename,
+#'
+
+face_crop_points_old <- function(landmarks, image, points = 'default', savename,
                              eye_dist = 125, rescale = TRUE, wh = 512, ...){
 
   on.exit(raster::removeTmpFiles(h=2))
@@ -282,8 +284,11 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
   scale <- as.numeric(as.character(eye_dist)) / as.numeric(as.character(pupil_dist))
   wh_scale <- wh/scale
 
-  centerx <- left_pupil[[1]]-(190/scale)
-  centery <- left_pupil[[2]]-(256/scale)
+  # centerx <- left_pupil[[1]]-(190/scale)
+  centerx <- (right_pupil[1]+left_pupil[1])/2
+
+  # centery <- left_pupil[[2]]-(256/scale)
+  centery <- -(right_pupil[2]+left_pupil[2])/2
 
   ## Now crop!
   image_sans <- tools::file_path_sans_ext(image)
@@ -292,7 +297,7 @@ face_crop_points <- function(landmarks, image, points = 'default', savename,
   w_h_x_y <- magick::geometry_area(wh_scale, wh_scale, centerx, centery)
 
   im <- magick::image_crop(img, w_h_x_y)
-  # magick::image_browse(im)
+  magick::image_browse(im)
 
   ## Load and rescale
   if (rescale==TRUE) {

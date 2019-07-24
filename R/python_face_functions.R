@@ -38,3 +38,160 @@ face_swap <- function(reference, target, convert = FALSE){
   }
 
 }
+
+#' Crop face from bounding box
+#'
+#' @param image
+#' @param bb
+#' @param savename
+#' @param return_img
+#' @param return_bb
+#' @param wh
+#' @param scale
+#' @param scale_left
+#' @param scale_top
+#' @param scale_right
+#' @param scale_bottom
+#'
+#' @return
+#' @export
+#'
+#' @examples
+face_crop <- function(image, bb = NULL, savename, return_img = FALSE,
+                                      return_bb=FALSE, wh = 200L, scale = TRUE,
+                                      scale_left = 0, scale_top=0.5,
+                                      scale_right = 0.1, scale_bottom = 0.1) {
+
+  cv <- reticulate::import("cv2")
+
+  py_file <- system.file("python", "bb.py", package = "faceplyr")
+  reticulate::source_python(py_file, convert = FALSE)
+
+  landmarks <- system.file("extdata", "shape_predictor_68_face_landmarks.dat",
+                           package = "faceplyr")
+
+  if (!is.null(bb)) {
+    bb <- bb
+
+  } else {
+    bb <- tf_bb(x = image, landmarks = landmarks, scale_left = 0, scale_top=0.5,
+                scale_right = 0.1, scale_bottom = 0.1)
+  }
+
+  crop_img <- tf_crop(x = image, bb = bb)
+
+  if (scale) {
+    imutils <- reticulate::import("imutils")
+    crop_img <- imutils$resize(crop_img, width = wh)
+  }
+
+  if (return_img) {
+    return(crop_img)
+
+  } else {
+    cv$imwrite(savename, crop_img)
+  }
+
+
+  if (return_bb) {
+    return(bb)
+  }
+
+  if (return_img & return_bb) {
+    return(list(image = crop_img,
+                bounding_box = bb))
+  }
+}
+
+#' Mask an image to interior face only
+#'
+#' @param image
+#' @param bb
+#' @param savename
+#' @param return_img
+#'
+#' @return
+#' @export
+#'
+#' @examples
+face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALSE) {
+    cv <- reticulate::import("cv2")
+
+    py_file <- system.file("python", "face_mask.py", package = "faceplyr")
+    reticulate::source_python(py_file, convert = FALSE)
+
+    landmarks <-
+      system.file("extdata",
+                  "shape_predictor_68_face_landmarks.dat",
+                  package = "faceplyr")
+
+    masked_face <- mask_face(image = image, landmarks = landmarks)
+
+    if (crop) {
+      tmp <- tempfile(fileext = paste0(".", tools::file_ext(image)))
+      cv$imwrite(tmp, masked_face)
+
+      masked_face <- crop_background(tmp)
+
+      if (file.exists(tmp)) file.remove(tmp)
+
+    }
+
+    if (return_img) {
+      return(masked_face)
+
+    } else {
+      cv$imwrite(savename, masked_face)
+    }
+}
+
+#' Halve a face image and save
+#'
+#' @param image
+#'
+#' @return
+#' @export
+#'
+#' @examples
+halve_face <- function(image) {
+  cv <- reticulate::import("cv2")
+
+  py_file <- system.file("python", "halve_image.py", package = "faceplyr")
+  reticulate::source_python(py_file, convert = FALSE)
+
+  halve_face(image = image)
+}
+
+#' Extract color histogram from face image
+#'
+#' @param img
+#' @param shape
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+face_hist <- function(img, shape = c(8, 8, 8)) {
+  py_file <- system.file("python", "face_features.py", package = "faceplyr")
+  reticulate::source_python(py_file, convert = FALSE)
+
+  hist <- face_hist(img = img,
+                    shape = shape)
+}
+
+#' Extract texture from face image
+#'
+#' @param img
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+face_texture <- function(img) {
+  py_file <- system.file("python", "face_features.py", package = "faceplyr")
+  reticulate::source_python(py_file, convert = FALSE)
+
+  textures <- face_texture(img = img)
+}
