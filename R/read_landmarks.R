@@ -67,7 +67,87 @@ read_landmarks.jpg <- function(x, ...) {
 }
 
 #' @export
+read_landmarks.JPG <- function(x, ...) {
+  cv <- reticulate::import('cv2', convert = FALSE)
+  img <- cv$imread(x)
+
+  py_file <- system.file("python", "get_landmarks.py", package = "faceplyr")
+  PREDICTOR_PATH = system.file("extdata", "shape_predictor_68_face_landmarks.dat", package = "faceplyr")
+
+  reticulate::source_python(py_file)
+  df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
+
+  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                          image_path = rep(x, nrow(df)),
+                          point = seq(0,(nrow(df)-1)),
+                          x = df[,1],
+                          y = df[,2])
+  class(landmarks) <- append(class(landmarks),"landmarks")
+  return(landmarks)
+}
+
+#' @export
+read_landmarks.tif <- function(x, ...) {
+  cv <- reticulate::import('cv2', convert = FALSE)
+  img <- cv$imread(x)
+
+  py_file <- system.file("python", "get_landmarks.py", package = "faceplyr")
+  PREDICTOR_PATH = system.file("extdata", "shape_predictor_68_face_landmarks.dat", package = "faceplyr")
+
+  reticulate::source_python(py_file)
+  df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
+
+  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                          image_path = rep(x, nrow(df)),
+                          point = seq(0,(nrow(df)-1)),
+                          x = df[,1],
+                          y = df[,2])
+  class(landmarks) <- append(class(landmarks),"landmarks")
+  return(landmarks)
+}
+
+#' @export
+read_landmarks.jpeg <- function(x, ...) {
+  cv <- reticulate::import('cv2', convert = FALSE)
+  img <- cv$imread(x)
+
+  py_file <- system.file("python", "get_landmarks.py", package = "faceplyr")
+  PREDICTOR_PATH = system.file("extdata", "shape_predictor_68_face_landmarks.dat", package = "faceplyr")
+
+  reticulate::source_python(py_file)
+  df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
+
+  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                          image_path = rep(x, nrow(df)),
+                          point = seq(0,(nrow(df)-1)),
+                          x = df[,1],
+                          y = df[,2])
+  class(landmarks) <- append(class(landmarks),"landmarks")
+  return(landmarks)
+}
+
+#' @export
 read_landmarks.png <- function(x, ...) {
+  cv <- reticulate::import('cv2', convert = FALSE)
+  img <- cv$imread(x)
+
+  py_file <- system.file("python", "get_landmarks.py", package = "faceplyr")
+  PREDICTOR_PATH = system.file("extdata", "shape_predictor_68_face_landmarks.dat", package = "faceplyr")
+
+  reticulate::source_python(py_file)
+  df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
+
+  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                          image_path = rep(x, nrow(df)),
+                          point = seq(0,(nrow(df)-1)),
+                          x = df[,1],
+                          y = df[,2])
+  class(landmarks) <- append(class(landmarks),"landmarks")
+  return(landmarks)
+}
+
+#' @export
+read_landmarks.character <- function(x, ...) {
   cv <- reticulate::import('cv2', convert = FALSE)
   img <- cv$imread(x)
 
