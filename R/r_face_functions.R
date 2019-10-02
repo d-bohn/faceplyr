@@ -9,15 +9,25 @@
 #'
 #' @examples
 #'
-transform_points <- function(landmarks1, landmarks2) {
-    landmarks1 <- landmarks1[c('x','y')]
-    landmarks2 <- landmarks2[c('x','y')]
+transform_points <- function(landmarks1, landmarks2, align_to = c("everything", "eyes")) {
+  if (align_to == "everything") {
+    landmarks1 <- landmarks1[c('x', 'y')]
+    landmarks2 <- landmarks2[c('x', 'y')]
+
+  } else if (align_to == "eyes") {
+    landmarks1 <- landmarks1[c(36:47),c('x', 'y')]
+    landmarks2 <- landmarks2[c(36:47), c('x', 'y')]
+
+  } else {
+    stop("'align_to' must be one of: 'everything', 'eyes'")
+  }
 
   tmp <- vegan::procrustes(landmarks1, landmarks2)
   r <- unlist(tmp['rotation'])
   t <- unlist(tmp['translation'])
 
-  affine <- matrix(c(r[[1]],r[[2]],t[[1]],r[[3]],r[[4]],t[[2]]), nrow=3)
+  affine <-
+    matrix(c(r[[1]], r[[2]], t[[1]], r[[3]], r[[4]], t[[2]]), nrow = 3)
   return(affine)
 }
 
