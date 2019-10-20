@@ -4,7 +4,8 @@
 \alias{transform_points}
 \title{Create affine transformation}
 \usage{
-transform_points(landmarks1, landmarks2)
+transform_points(landmarks1, landmarks2, align_to = c("everything",
+  "eyes"))
 }
 \arguments{
 \item{landmarks1}{Reference image to warp to.}

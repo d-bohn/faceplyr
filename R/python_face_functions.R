@@ -109,12 +109,13 @@ face_crop <- function(image, bb = NULL, savename, return_img = FALSE,
 #' @param bb
 #' @param savename
 #' @param return_img
+#' @param transparent
 #'
 #' @return
 #' @export
 #'
 #' @examples
-face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALSE) {
+face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALSE, transparent = TRUE) {
     cv <- reticulate::import("cv2")
 
     py_file <- system.file("python", "face_mask.py", package = "faceplyr")
@@ -128,12 +129,16 @@ face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALS
     masked_face <- mask_face(image = image, landmarks = landmarks)
 
     if (crop) {
-      tmp <- tempfile(fileext = paste0(".", tools::file_ext(image)))
-      cv$imwrite(tmp, masked_face)
+      masked_face <- crop_background(masked_face)
 
-      masked_face <- crop_background(tmp)
+      if (transparent) {
+        if (tools::file_ext(savename) != "png") {
+          stop ("transparency requires saving image as a PNG")
 
-      if (file.exists(tmp)) file.remove(tmp)
+        }
+        masked_face <- remove_background(masked_face)
+
+      }
 
     }
 

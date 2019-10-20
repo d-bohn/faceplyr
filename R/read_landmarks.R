@@ -57,13 +57,17 @@ read_landmarks.jpg <- function(x, ...) {
   reticulate::source_python(py_file)
   df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
 
-  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
-                          image_path = rep(x, nrow(df)),
-                          point = seq(0,(nrow(df)-1)),
-                          x = df[,1],
-                          y = df[,2])
-  class(landmarks) <- append(class(landmarks),"landmarks")
-  return(landmarks)
+  if (!is.null(df)) {
+    landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                            image_path = rep(x, nrow(df)),
+                            point = seq(0,(nrow(df)-1)),
+                            x = df[,1],
+                            y = df[,2])
+    class(landmarks) <- append(class(landmarks),"landmarks")
+    return(landmarks)
+  } else {
+    warning("No faces found.")
+  }
 }
 
 #' @export
@@ -77,13 +81,17 @@ read_landmarks.JPG <- function(x, ...) {
   reticulate::source_python(py_file)
   df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
 
-  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
-                          image_path = rep(x, nrow(df)),
-                          point = seq(0,(nrow(df)-1)),
-                          x = df[,1],
-                          y = df[,2])
-  class(landmarks) <- append(class(landmarks),"landmarks")
-  return(landmarks)
+  if (!is.null(df)) {
+    landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                            image_path = rep(x, nrow(df)),
+                            point = seq(0,(nrow(df)-1)),
+                            x = df[,1],
+                            y = df[,2])
+    class(landmarks) <- append(class(landmarks),"landmarks")
+    return(landmarks)
+  } else {
+    warning("No faces found.")
+  }
 }
 
 #' @export
@@ -97,13 +105,17 @@ read_landmarks.tif <- function(x, ...) {
   reticulate::source_python(py_file)
   df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
 
-  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
-                          image_path = rep(x, nrow(df)),
-                          point = seq(0,(nrow(df)-1)),
-                          x = df[,1],
-                          y = df[,2])
-  class(landmarks) <- append(class(landmarks),"landmarks")
-  return(landmarks)
+  if (!is.null(df)) {
+    landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                            image_path = rep(x, nrow(df)),
+                            point = seq(0,(nrow(df)-1)),
+                            x = df[,1],
+                            y = df[,2])
+    class(landmarks) <- append(class(landmarks),"landmarks")
+    return(landmarks)
+  } else {
+    warning("No faces found.")
+  }
 }
 
 #' @export
@@ -117,13 +129,17 @@ read_landmarks.jpeg <- function(x, ...) {
   reticulate::source_python(py_file)
   df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
 
-  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
-                          image_path = rep(x, nrow(df)),
-                          point = seq(0,(nrow(df)-1)),
-                          x = df[,1],
-                          y = df[,2])
-  class(landmarks) <- append(class(landmarks),"landmarks")
-  return(landmarks)
+  if (!is.null(df)) {
+    landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                            image_path = rep(x, nrow(df)),
+                            point = seq(0,(nrow(df)-1)),
+                            x = df[,1],
+                            y = df[,2])
+    class(landmarks) <- append(class(landmarks),"landmarks")
+    return(landmarks)
+  } else {
+    warning("No faces found.")
+  }
 }
 
 #' @export
@@ -137,13 +153,17 @@ read_landmarks.png <- function(x, ...) {
   reticulate::source_python(py_file)
   df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
 
-  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
-                          image_path = rep(x, nrow(df)),
-                          point = seq(0,(nrow(df)-1)),
-                          x = df[,1],
-                          y = df[,2])
-  class(landmarks) <- append(class(landmarks),"landmarks")
-  return(landmarks)
+  if (!is.null(df)) {
+    landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                            image_path = rep(x, nrow(df)),
+                            point = seq(0,(nrow(df)-1)),
+                            x = df[,1],
+                            y = df[,2])
+    class(landmarks) <- append(class(landmarks),"landmarks")
+    return(landmarks)
+  } else {
+    warning("No faces found.")
+  }
 }
 
 #' @export
@@ -157,11 +177,15 @@ read_landmarks.character <- function(x, ...) {
   reticulate::source_python(py_file)
   df <- get_landmarks(im = img, PREDICTOR_PATH = PREDICTOR_PATH)
 
-  landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
-                          image_path = rep(x, nrow(df)),
-                          point = seq(0,(nrow(df)-1)),
-                          x = df[,1],
-                          y = df[,2])
-  class(landmarks) <- append(class(landmarks),"landmarks")
-  return(landmarks)
+  if (!is.null(df)) {
+    landmarks <- data.frame(image_base = rep(basename(x),nrow(df)),
+                            image_path = rep(x, nrow(df)),
+                            point = seq(0,(nrow(df)-1)),
+                            x = df[,1],
+                            y = df[,2])
+    class(landmarks) <- append(class(landmarks),"landmarks")
+    return(landmarks)
+  } else {
+    warning("No faces found.")
+  }
 }

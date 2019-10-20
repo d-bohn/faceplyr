@@ -5,10 +5,10 @@
 \title{Mask an image to interior face only}
 \usage{
 face_mask(image, bb = NULL, crop = TRUE, savename,
-  return_img = FALSE)
+  return_img = FALSE, transparent = TRUE)
 }
 \arguments{
-\item{return_img}{}
+\item{transparent}{}
 }
 \description{
 Mask an image to interior face only

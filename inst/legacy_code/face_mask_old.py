@@ -17,23 +17,22 @@ def face_remap(shape):
     remapped_image[24] = shape[19]
     remapped_image[25] = shape[18]
     remapped_image[26] = shape[17]
-
-    # neatening
+    # neatening 
     remapped_image = cv2.convexHull(shape)
     return remapped_image
-
+   
 def mask_face(image, landmarks):
-  # modified from original source
-  # https://stackoverflow.com/questions/46712766/cropping-face-using-dlib-facial-landmarks
+    # modified from original source
+    # https://stackoverflow.com/questions/46712766/cropping-face-using-dlib-facial-landmarks
 
     if isinstance(image, str):
         image = cv2.imread(image)
     else:
         image = image
-
+    
     # image = imutils.resize(image, width=500)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
+     
     out_face = np.zeros_like(image)
 
     # initialize dlib's face detector (HOG-based) and then create the facial landmark predictor
@@ -49,18 +48,18 @@ def mask_face(image, landmarks):
         shape = face_utils.shape_to_np(shape)
 
         #initialize mask array
-        remapped_shape = np.zeros_like(shape)
-        feature_mask = np.zeros((image.shape[0], image.shape[1]))
+        remapped_shape = np.zeros_like(shape) 
+        feature_mask = np.zeros((image.shape[0], image.shape[1]))   
 
         # we extract the face
         remapped_shape = face_remap(shape)
         cv2.fillConvexPoly(feature_mask, remapped_shape[0:27], 1)
         feature_mask = feature_mask.astype(np.bool)
         out_face[feature_mask] = image[feature_mask]
-
+    
     return out_face
 
-def crop_background(image):
+def crop_background(image, transparent = True):
   # modified from original source
   # https://stackoverflow.com/questions/46712766/cropping-face-using-dlib-facial-landmarks
 
@@ -84,19 +83,11 @@ def crop_background(image):
     x,y,w,h = cv2.boundingRect(cnt)
     dst = image[y:y+h, x:x+w]
 
-    return dst
-    
-def remove_background(image):
-    
-    if isinstance(image, str):
-        image = cv2.imread(image)
-    else:
-        image = image
-    
-    tmp = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    _,alpha = cv2.threshold(tmp,0,255,cv2.THRESH_BINARY)
-    b, g, r = cv2.split(image)
-    rgba = [b,g,r, alpha]
-    dst = cv2.merge(rgba,4)
-    
+    if transparent:
+        tmp = cv2.cvtColor(dst, cv2.COLOR_BGR2GRAY)
+        _,alpha = cv2.threshold(tmp,0,255,cv2.THRESH_BINARY)
+        b, g, r = cv2.split(dst)
+        rgba = [b,g,r, alpha]
+        dst = cv2.merge(rgba,4)
+
     return dst
