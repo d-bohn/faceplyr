@@ -200,3 +200,25 @@ face_texture <- function(img) {
 
   textures <- face_texture(img = img)
 }
+
+remove_background <- function(image, savename, return_img = FALSE) {
+  py_file <- system.file("python", "face_mask.py", package = "faceplyr")
+  reticulate::source_python(py_file, convert = FALSE)
+
+  masked_face <- crop_background(image)
+
+  if (tools::file_ext(savename) != "png") {
+    stop ("transparency requires saving image as a PNG")
+
+  }
+
+  masked_face <- remove_background(masked_face)
+
+  if (return_img) {
+    return(masked_face)
+
+  } else {
+    # cv <- reticulate::import("cv2")
+    cv$imwrite(savename, masked_face)
+  }
+}
