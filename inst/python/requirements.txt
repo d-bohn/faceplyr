@@ -1,0 +1,8 @@
+autocrop==0.3.5
+certifi==2019.11.28
+dlib==19.19.0
+imutils==0.5.3
+mahotas==1.4.9
+numpy==1.18.1
+opencv-python==3.4.8.29
+Pillow==7.0.0
