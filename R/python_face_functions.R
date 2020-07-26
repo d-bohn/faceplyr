@@ -169,18 +169,35 @@ halve_face <- function(image) {
 
 #' Extract color histogram from face image
 #'
-#' @param img
-#' @param shape
-#' @param colorspace
+#' @param img Image to be analyzed (png or jpg).
+#' @param shape (blue, red, green) or (hue, saturation, and value) histogram bin sizes for `RGB` and `HSV`, respectively.
+#' @param colorspace Whether to use `rgb` or `hsv` colorspace when computing histogram.
 #'
-#' @return
+#' @return Returns vector of size shape*3 in the same order as defined above (blue, green, red) for `rgb` and (hue, saturation, value) for `hsv`.
+#'
 #' @export
 #'
 #' @examples
 #'
 face_hist <- function(img, shape = c(8, 8, 8), colorspace = "rgb") {
-  if (!(colorspace %in% c("rgb","hsv"))) {
+  # Some checks
+  if (!(colorspace %in% c("rgb", "hsv"))) {
     stop("'colorspace' must be of value 'rgb' or 'hsv'")
+  }
+
+  if (colorspace == "hsv" &
+      shape[1] > 180 | shape[1] < 1) {
+    stop("'hsv' hue bin value must be between 1 and 180")
+  }
+
+  if (colorspace == "hsv"  &
+      any(shape[2:3] > 255) | any(shape[2:3] < 1) ) {
+    stop("'hsv' saturation and value bin values bust be between 1 and 255")
+  }
+
+  if (colorspace == "rgb"  &
+      any(shape > 255) | any(shape < 1) ) {
+    stop("'rgb' red, green, and blue bin values bust be between 1 and 255")
   }
 
   py_file <- system.file("python", "face_features.py", package = "faceplyr")
