@@ -7,11 +7,22 @@
 \alias{Albohn}
 \title{Crop a face and rescale}
 \usage{
-face_crop_points_old(landmarks, image, points = "default", savename,
-  eye_dist = 125, rescale = TRUE, wh = 512, ...)
+face_crop_points_old(
+  landmarks,
+  image,
+  points = "default",
+  savename,
+  eye_dist = 125,
+  rescale = TRUE,
+  wh = 512,
+  ...
+)
 }
 \arguments{
 \item{dist}{}
+}
+\value{
+
 }
 \description{
 Crop a face and rescale

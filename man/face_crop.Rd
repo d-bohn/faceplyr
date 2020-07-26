@@ -4,12 +4,25 @@
 \alias{face_crop}
 \title{Crop face from bounding box}
 \usage{
-face_crop(image, bb = NULL, savename, return_img = FALSE,
-  return_bb = FALSE, wh = 200L, scale = TRUE, scale_left = 0,
-  scale_top = 0.5, scale_right = 0.1, scale_bottom = 0.1)
+face_crop(
+  image,
+  bb = NULL,
+  savename,
+  return_img = FALSE,
+  return_bb = FALSE,
+  wh = 200L,
+  scale = TRUE,
+  scale_left = 0,
+  scale_top = 0.5,
+  scale_right = 0.1,
+  scale_bottom = 0.1
+)
 }
 \arguments{
 \item{scale_bottom}{}
+}
+\value{
+
 }
 \description{
 Crop face from bounding box

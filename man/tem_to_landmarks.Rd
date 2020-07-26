@@ -13,6 +13,9 @@ tem_to_landmarks(tem, write_out = TRUE, savename)
 
 \item{savename}{File save name without extension (optional).}
 }
+\value{
+
+}
 \description{
 Convert a \code{.tem} file created by JPsychomoprh back to a standard facial landmarks file
 for use with \code{quantIm}.

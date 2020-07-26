@@ -2,15 +2,18 @@
 % Please edit documentation in R/python_face_functions.R
 \name{face_texture}
 \alias{face_texture}
-\title{Extract texture from face image}
+\title{Extract Haralick texture features from face image}
 \usage{
 face_texture(img)
 }
 \arguments{
 \item{img}{}
 }
+\value{
+
+}
 \description{
-Extract texture from face image
+Extract Haralick texture features from face image
 }
 \examples{
 

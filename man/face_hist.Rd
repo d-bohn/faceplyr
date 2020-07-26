@@ -4,10 +4,13 @@
 \alias{face_hist}
 \title{Extract color histogram from face image}
 \usage{
-face_hist(img, shape = c(8, 8, 8))
+face_hist(img, shape = c(8, 8, 8), colorspace = "rgb")
 }
 \arguments{
-\item{shape}{}
+\item{colorspace}{}
+}
+\value{
+
 }
 \description{
 Extract color histogram from face image

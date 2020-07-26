@@ -4,11 +4,20 @@
 \alias{face_mask}
 \title{Mask an image to interior face only}
 \usage{
-face_mask(image, bb = NULL, crop = TRUE, savename,
-  return_img = FALSE, transparent = TRUE)
+face_mask(
+  image,
+  bb = NULL,
+  crop = TRUE,
+  savename,
+  return_img = FALSE,
+  transparent = TRUE
+)
 }
 \arguments{
 \item{transparent}{}
+}
+\value{
+
 }
 \description{
 Mask an image to interior face only

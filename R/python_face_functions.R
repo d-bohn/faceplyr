@@ -179,7 +179,7 @@ halve_face <- function(image) {
 #' @examples
 #'
 face_hist <- function(img, shape = c(8, 8, 8), colorspace = "rgb") {
-  if (colorspace %in% c("rgb","hsv")) {
+  if (!(colorspace %in% c("rgb","hsv"))) {
     stop("'colorspace' must be of value 'rgb' or 'hsv'")
   }
 

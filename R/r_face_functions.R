@@ -81,7 +81,7 @@ create_average_template <- function(files) {
 
 #' Converts landmarks file to json file
 #'
-#' @param landmarks Landmarks returned from \link[quantIm]{read_landmarks}
+#' @param landmarks Landmarks returned from \link[faceplyr]{read_landmarks}
 #' @param write_out If \code{TRUE} (default) write file to disk, else returns landmarks as json.
 #' @param savename If supplied the name of the file to write out, else will derive directory from
 #' landmarks file supplied.
@@ -92,7 +92,7 @@ create_average_template <- function(files) {
 #' @export
 #'
 #' @examples
-#' img <- system.file("extdata", "obama.png", package = "quantIm")
+#' img <- system.file("extdata", "obama.png", package = "faceplyr")
 #' landmarks <- read_landmarks(img)
 #' landmarks_to_json(landmarks)
 #'
@@ -115,7 +115,7 @@ landmarks_to_json <- function(landmarks, write_out = TRUE, savename) {
     }
   }
 
-  tem <- jsonlite::fromJSON(system.file("extdata", "dlib-landmark-mean__labels.json", package = "quantIm"))
+  tem <- jsonlite::fromJSON(system.file("extdata", "dlib-landmark-mean__labels.json", package = "faceplyr"))
 
   tem$image_filename <- landmarks$image_base[[1]]
   tem$labels$position$x <- landmarks$x
@@ -133,7 +133,7 @@ landmarks_to_json <- function(landmarks, write_out = TRUE, savename) {
 
 #' Converts landmarks to JPsychomorph tem file
 #'
-#' @param landmarks Landmarks returned from \link[quantIm]{read_landmarks}
+#' @param landmarks Landmarks returned from \link[faceplyr]{read_landmarks}
 #' @param write_out If \code{TRUE} (default) write file to disk, else returns landmarks as json.
 #' @param savename If supplied the name of the file to write out, else will derive directory from
 #' landmarks file supplied.
@@ -176,8 +176,7 @@ landmarks_to_tem <- function(landmarks, write_out = TRUE, savename) {
 #' Convert JPsychomorph template to landmarks
 #'
 #' @description
-#' Convert a \code{.tem} file created by JPsychomoprh back to a standard facial landmarks file
-#' for use with \code{quantIm}.
+#' Convert a \code{.tem} file created by JPsychomoprh back to a standard facial landmarks file.
 #'
 #' @param tem Template file
 #' @param write_out Should the file be written out or returned?

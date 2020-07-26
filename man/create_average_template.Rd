@@ -9,6 +9,9 @@ create_average_template(files)
 \arguments{
 \item{files}{List of files to be averaged.}
 }
+\value{
+
+}
 \description{
 Create an average template from multiple templates
 }

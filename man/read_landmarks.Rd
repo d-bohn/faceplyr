@@ -10,7 +10,7 @@ read_landmarks(x, ...)
 \item{x}{Image or file to read. Acceptable files include JPsychomorph .tem files,
 PNG, or JPG images.}
 
-\item{...}{Additional arguments to pass.}
+\item{...}{Additional arguments to pass (unused).}
 }
 \value{
 Data frame of type \code{landmarks} with 68 facial landmarks.
@@ -19,7 +19,7 @@ Data frame of type \code{landmarks} with 68 facial landmarks.
 Functions to read/obtain facial landmarks from files or images.
 }
 \examples{
-img <- system.file("extdata", "obama.png", package = "quantIm")
+img <- system.file("extdata", "obama.png", package = "faceplyr")
 read_landmarks(img)
 read_landmarks("template.tem")
 

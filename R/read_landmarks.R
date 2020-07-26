@@ -14,7 +14,7 @@
 #' @export
 #'
 #' @examples
-#' img <- system.file("extdata", "obama.png", package = "quantIm")
+#' img <- system.file("extdata", "obama.png", package = "faceplyr")
 #' read_landmarks(img)
 #' read_landmarks("template.tem")
 #'

@@ -9,6 +9,9 @@ halve_face(image)
 \arguments{
 \item{image}{}
 }
+\value{
+
+}
 \description{
 Halve a face image and save
 }

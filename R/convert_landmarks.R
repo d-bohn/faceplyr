@@ -31,7 +31,7 @@ convert_landmarks.json <- function(landmarks, write_out = TRUE, savename) {
     }
   }
 
-  tem <- jsonlite::fromJSON(system.file("extdata", "dlib-landmark-mean__labels.json", package = "quantIm"))
+  tem <- jsonlite::fromJSON(system.file("extdata", "dlib-landmark-mean__labels.json", package = "faceplyr"))
 
   tem$image_filename <- landmarks$image_base[[1]]
   tem$labels$position$x <- landmarks$x

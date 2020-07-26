@@ -11,6 +11,9 @@ warp_face(image, m)
 
 \item{m}{Affine matrix.}
 }
+\value{
+
+}
 \description{
 Warp image with affine transformation
 }
