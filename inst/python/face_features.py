@@ -2,25 +2,32 @@ import cv2
 import mahotas as mt
 import numpy as np
   
-def face_hist(img, shape):
-  image = cv2.imread(img)
+def face_hist(img, shape, colorspace):
+  img_read = cv2.imread(img)
   
-  # grab the image channels, initialize the tuple of colors,
-  # the figure and the flattened feature vector
-  chans = cv2.split(image)
-  colors = ("b", "g", "r")
-  # plt.figure()
-  # plt.title("'Flattened' Color Histogram")
-  # plt.xlabel("Bins")
-  # plt.ylabel("# of Pixels")
+  if colorspace == "rgb":
+    image = img_read
+    # grab the image channels, initialize the tuple of colors,
+    # the figure and the flattened feature vector
+    chans = cv2.split(image)
+    colors = ("b", "g", "r")
+    ranges = [[0,256],[0,256],[0,256]]
+  
+  if colorspace == "hsv":
+    image = cv2.cvtColor(img_read, cv2.COLOR_BGR2HSV)
+    chans = cv2.split(image)
+    colors = ("h","s","v")
+    ranges = [[0,180],[0,256],[0,256]]
+ 
   features = []
  
   # loop over the image channels
-  for (chan, color) in zip(chans, colors):
+  for (chan, color, bins, ran) in zip(chans, colors, shape, ranges):
 	  # create a histogram for the current channel and
 	  # concatenate the resulting histograms for each
 	  # channel
-	  hist = cv2.calcHist([chan], [0], None, [shape], [0, 256])
+	  
+	  hist = cv2.calcHist([chan], [0], None, [bins], ran)
 	  features.extend(hist)
  
 	  # plot the histogram

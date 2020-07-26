@@ -171,21 +171,27 @@ halve_face <- function(image) {
 #'
 #' @param img
 #' @param shape
+#' @param colorspace
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #'
-face_hist <- function(img, shape = c(8, 8, 8)) {
+face_hist <- function(img, shape = c(8, 8, 8), colorspace = "rgb") {
+  if (colorspace %in% c("rgb","hsv")) {
+    stop("'colorspace' must be of value 'rgb' or 'hsv'")
+  }
+
   py_file <- system.file("python", "face_features.py", package = "faceplyr")
   reticulate::source_python(py_file, convert = FALSE)
 
   hist <- face_hist(img = img,
-                    shape = shape)
+                    shape = shape,
+                    colorspace = colorspace)
 }
 
-#' Extract texture from face image
+#' Extract Haralick texture features from face image
 #'
 #' @param img
 #'

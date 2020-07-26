@@ -5,7 +5,7 @@
 #'
 #' @param x Image or file to read. Acceptable files include JPsychomorph .tem files,
 #' PNG, or JPG images.
-#' @param ... Additional arguments to pass.
+#' @param ... Additional arguments to pass (unused).
 #'
 #' @return Data frame of type \code{landmarks} with 68 facial landmarks.
 #'
@@ -63,8 +63,10 @@ read_landmarks.jpg <- function(x, ...) {
                             point = seq(0,(nrow(df)-1)),
                             x = df[,1],
                             y = df[,2])
+
     class(landmarks) <- append(class(landmarks),"landmarks")
     return(landmarks)
+
   } else {
     warning("No faces found.")
   }

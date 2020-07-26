@@ -1,6 +1,6 @@
 Package: faceplyr
 Title: Tools for Facial Image Analysis in R
-Version: 0.0.0.911
+Version: 0.2
 Authors: Daniel Albohn, dna5021@psu.edu, aut cre
 Description: A suite of R functions for dealing with face images.
 Depends: R (>= 3.4.1)
@@ -16,5 +16,3 @@ imports:
     tools,
     vegan,
     raster
-suggests:
-    quantIm
