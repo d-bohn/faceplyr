@@ -7,10 +7,14 @@
 face_hist(img, shape = c(8, 8, 8), colorspace = "rgb")
 }
 \arguments{
-\item{colorspace}{}
+\item{img}{Image to be analyzed (png or jpg).}
+
+\item{shape}{(blue, red, green) or (hue, saturation, and value) histogram bin sizes for `RGB` and `HSV`, respectively.}
+
+\item{colorspace}{Whether to use `rgb` or `hsv` colorspace when computing histogram.}
 }
 \value{
-
+Returns vector of size shape*3 in the same order as defined above (blue, green, red) for `rgb` and (hue, saturation, value) for `hsv`.
 }
 \description{
 Extract color histogram from face image

@@ -1,6 +1,7 @@
-transform_image = 'test.jpg'
-left_same = TRUE
-right_window = 'test_angry.jpg'
+# transform_image = 'test.jpg'
+# left_same = TRUE
+# right_window = 'test_angry.jpg'
+
 create_superbatch_jpm <- function(transform_image,
                                   left_same = TRUE,
                                   left_window,
@@ -77,4 +78,4 @@ create_superbatch_jpm <- function(transform_image,
     return(batch)
   }
 
-create_superbatch_jpm(transform_image, left_same=1, right_window=right_window)
+# create_superbatch_jpm(transform_image, left_same=1, right_window=right_window)

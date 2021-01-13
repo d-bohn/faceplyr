@@ -92,7 +92,6 @@ face_crop <- function(image, bb = NULL, savename, return_img = FALSE,
     cv$imwrite(savename, crop_img)
   }
 
-
   if (return_bb) {
     return(bb)
   }
@@ -132,14 +131,13 @@ face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALS
       masked_face <- crop_background(masked_face)
 
       if (transparent) {
+
         if (tools::file_ext(savename) != "png") {
           stop ("transparency requires saving image as a PNG")
 
         }
         masked_face <- remove_background(masked_face)
-
       }
-
     }
 
     if (return_img) {
@@ -192,7 +190,7 @@ face_hist <- function(img, shape = c(8, 8, 8), colorspace = "rgb") {
 
   if (colorspace == "hsv"  &
       any(shape[2:3] > 255) | any(shape[2:3] < 1) ) {
-    stop("'hsv' saturation and value bin values bust be between 1 and 255")
+    stop("'hsv' saturation and value bin values must be between 1 and 255")
   }
 
   if (colorspace == "rgb"  &

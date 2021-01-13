@@ -7,7 +7,7 @@
 landmarks_to_json(landmarks, write_out = TRUE, savename)
 }
 \arguments{
-\item{landmarks}{Landmarks returned from \link[quantIm]{read_landmarks}}
+\item{landmarks}{Landmarks returned from \link[faceplyr]{read_landmarks}}
 
 \item{write_out}{If \code{TRUE} (default) write file to disk, else returns landmarks as json.}
 
@@ -21,7 +21,7 @@ File or landmarks as type \code{.json}
 Converts landmarks file to json file
 }
 \examples{
-img <- system.file("extdata", "obama.png", package = "quantIm")
+img <- system.file("extdata", "obama.png", package = "faceplyr")
 landmarks <- read_landmarks(img)
 landmarks_to_json(landmarks)
 

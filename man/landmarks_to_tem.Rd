@@ -7,7 +7,7 @@
 landmarks_to_tem(landmarks, write_out = TRUE, savename)
 }
 \arguments{
-\item{landmarks}{Landmarks returned from \link[quantIm]{read_landmarks}}
+\item{landmarks}{Landmarks returned from \link[faceplyr]{read_landmarks}}
 
 \item{write_out}{If \code{TRUE} (default) write file to disk, else returns landmarks as json.}
 
