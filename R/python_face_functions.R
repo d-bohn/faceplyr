@@ -54,7 +54,6 @@ face_swap <- function(reference, target, convert = FALSE){
 #' @param scale_bottom
 #'
 #' @return
-#' @export
 #'
 #' @examples
 face_crop <- function(image, bb = NULL, savename, return_img = FALSE,

@@ -4,10 +4,10 @@
 \alias{extract_structure}
 \title{Extract structure metric from interior of the face}
 \usage{
-extract_structure(image, data_save_folder)
+extract_structure(image, data_save_folder, return_results = FALSE)
 }
 \arguments{
-\item{data_save_folder}{}
+\item{return_results}{}
 }
 \value{
 

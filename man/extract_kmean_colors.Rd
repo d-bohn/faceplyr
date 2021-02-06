@@ -4,7 +4,12 @@
 \alias{extract_kmean_colors}
 \title{Extract kmeans color metric from interior face}
 \usage{
-extract_kmean_colors(image, data_save_folder, kclusts = 25)
+extract_kmean_colors(
+  image,
+  data_save_folder,
+  return_results = FALSE,
+  kclusts = 25
+)
 }
 \arguments{
 \item{kclusts}{}

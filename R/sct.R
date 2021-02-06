@@ -243,19 +243,35 @@ extract_hist_colors <- function(image, data_save_folder, return_results = FALSE)
   vars <- extract_vars(image,data_save_folder = data_save_folder)
 
   if (fs::file_exists(vars$savename)) {
+    shape <- 32
+
     col <- tryCatch({
-      color <- face_hist(vars$savename, shape = c(5,5,5))
+      color <- face_hist(vars$savename, shape = c(shape,shape,shape))
       color <- tibble(color=array(color),
                       number = 1:length(color))
 
+      # color2 <- color %>%
+      #   gather(., key, value, -number) %>%
+      #   unite(., key, key, number) %>%
+      #   spread(., key, value) %>%
+      #   mutate(., image = unique(vars$img),
+      #          image_base = unique(vars$img_basename),
+      #          emotion = vars$emotion) %>%
+      #   select(., image, image_base, emotion, everything())
+
       color2 <- color %>%
         gather(., key, value, -number) %>%
-        unite(., key, key, number) %>%
-        spread(., key, value) %>%
-        mutate(., image = unique(vars$img),
-               image_base = unique(vars$img_basename),
+        mutate(., color = case_when(
+          number <= shape ~ "blue",
+          shape < number & number <= shape*2 ~ "green",
+          number > shape*2 ~ "red"
+        )) %>%
+        group_by(., color) %>%
+        mutate(., bin = 1:shape) %>%
+        mutate(., image = vars$img,
+               image_base = vars$img_basename,
                emotion = vars$emotion) %>%
-        select(., image, image_base, emotion, everything())
+        select(., image, image_base, emotion, everything(), -key)
 
     }, warning = function(w) {
       message(sprintf("Warning in %s: %s", deparse(w[["call"]]), w[["message"]]))
@@ -480,7 +496,7 @@ extract_elements <- function(image, data_save_folder = "./data", return_results 
                       return_results = return_results)
 
   ## [x] TODO: add luminance function
-  extract_luminanceee(image = image, data_save_folder = data_save_folder,
+  extract_luminance(image = image, data_save_folder = data_save_folder,
                       return_results = return_results)
 }
 

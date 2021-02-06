@@ -4,10 +4,10 @@
 \alias{extract_hist_colors}
 \title{Extract color histogram metric from interior of face}
 \usage{
-extract_hist_colors(image, data_save_folder)
+extract_hist_colors(image, data_save_folder, return_results = FALSE)
 }
 \arguments{
-\item{data_save_folder}{}
+\item{return_results}{}
 }
 \value{
 

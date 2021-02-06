@@ -2,16 +2,16 @@
 % Please edit documentation in R/sct.R
 \name{extract_elements}
 \alias{extract_elements}
-\title{Helper wrapper function for metric extraction}
+\title{Wrapper function for metric extraction}
 \usage{
-extract_elements(image, data_save_folder = "./data")
+extract_elements(image, data_save_folder = "./data", return_results = FALSE)
 }
 \arguments{
-\item{data_save_folder}{}
+\item{return_results}{}
 }
 \value{
 
 }
 \description{
-Helper wrapper function for metric extraction
+Wrapper function for metric extraction
 }

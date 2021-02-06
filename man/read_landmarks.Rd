@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_landmarks.R
 \name{read_landmarks}
 \alias{read_landmarks}
-\title{Read face landmarks}
+\title{Read face landmarks using Python's dlib}
 \usage{
 read_landmarks(x, ...)
 }

@@ -4,7 +4,7 @@
 \alias{extract_luminance}
 \title{Extract luminance, RGB, and HSV values from cheeks and foreead of face}
 \usage{
-extract_luminance(image, data_save_folder, buffer = 2)
+extract_luminance(image, data_save_folder, return_results = FALSE, buffer = 2)
 }
 \arguments{
 \item{buffer}{}

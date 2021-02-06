@@ -1,17 +1,23 @@
 `faceplyr`: Tools to work with faces in R
 ================
 
-# `faceplyr` <img src="inst/imgs/faceplyr_hex.png" align="right" />
+# `faceplyr` <img src="imgs/faceplyr_hex.png" align="right" />
 
 # Motivation
 
-Mainly selfish. I wanted to work mostly in the R environment and have R
-code that performed like I would expect R to perform, but with the
-performance and breadth of some python image functions I wish R had
-natively. In a similar vein, I found myself loading multiple R image
-libraries to perform a set of operations on one image. A single package
-that brought all of this together under one convenient roof was the main
-motivating factor for writing this package.
+My motivation is primarily selfish. I wanted to work mostly in the R
+environment and have R code that performed like I would expect R to
+perform, but with the performance and breadth of a few Python image
+functions I wish R had natively. In a similar vein, I found myself
+loading multiple R image libraries to perform a set of operations on one
+image. A single package that brought all of this together under one
+convenient roof was the main motivating factor for writing this package.
+
+This is my first “real” R package, so it is messy. Really messy. I’ve
+learned a lot since I started writing this package, and I have hopes of
+cleaning it up and reducing dependencies in the future (see TODOs).
+However, as a scientist and not a developer, my main motivation was to
+get the code I wanted to work rather than preform elegantly.
 
 # Disclaimer
 
@@ -138,7 +144,7 @@ extract_structure(image = image, data_save_folder = "./output", return_results =
 The above code should result in the image saved to
 `./output/queen_cropped.png`:
 
-![](inst/imgs/queen_cropped.png)
+![](imgs/queen_cropped.png)
 
 Notice that a `data_save_folder` was specified and `return_results` was
 set to `FALSE`. This combination will save a `RDS` file to the
@@ -155,7 +161,7 @@ locations with the `plot_landmarks` helper function:
 plot_landmarks(image = system.file("extdata", "queen.png", package = "faceplyr"))
 ```
 
-![](README_files/figure-gfm/plot-landmarks-1.png)<!-- -->
+![](imgs/plot-landmarks-1.png)
 
 After running `extract_structure` on an image all of the other
 `extract_*` functions should auto-*magically* work on the same image.
@@ -165,3 +171,30 @@ extract_hist_colors(image = image, data_save_folder = "./output")
 
 # → Image complete (color hist): ./output/queen_cropped.png
 ```
+
+# TODO List
+
+There are a number of “wish list” items that I want to implement in this
+package. Here is a running list:
+
+-   Create `Dockerfile` for easy install on host machines
+
+    -   Major priority
+
+-   Reduce overall dependencies
+
+-   Cleanup `.R` files
+
+-   Cleanup `legacy`, `devel`, and unused Python files in `inst`
+
+-   Create “in house” facial landmark classifier to reduce dependencies
+    and speedup landmarking
+
+    -   Major priority
+    -   Working on this with R’s version of `keras` and a number of
+        facial landmark database
+
+-   Estimate facial roundness (e.g., `faceplyr::extract_roundness`, but
+    see, `faceplyr::calc_roundness`)
+
+-   Estimate facial angularity (e.g., `faceplyr::extract_angularity`)

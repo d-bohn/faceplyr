@@ -1,8 +1,10 @@
 convert_landmarks <- function(x, write_out = TRUE, savename) {
-  if (endsWith(x, '.json')) {
-    inherits(x, 'json')
+  # if (endsWith(x, '.json')) {
+  #   inherits(x, 'json')
+  #
+  # } else
 
-  } else if (endsWith(x, '.tem')) {
+  if (endsWith(x, '.tem')) {
     inherits(x, 'tem')
 
   } else if (endsWith(x, '.csv')) {
@@ -15,53 +17,7 @@ convert_landmarks <- function(x, write_out = TRUE, savename) {
   UseMethod('convert_landmarks', x)
 }
 
-convert_landmarks.json <-
-  function(landmarks, write_out = TRUE, savename) {
-    if (isFALSE(is.data.frame(landmarks)) &
-        isFALSE(is.character(landmarks))) {
-      message("Please supply landmark dataframe or path")
-
-    } else if (isFALSE(is.data.frame(landmarks)) &
-               isTRUE(is.character(landmarks))) {
-      landmark_file <- landmarks
-      landmarks <- read.csv(landmarks)
-      file <-
-        tools::file_path_sans_ext(as.character(landmarks$image_base[[1]]))
-
-      if (isFALSE(hasArg(savename))) {
-        savename <-
-          file.path(dirname(landmark_file), paste0(file, '__labels.json'))
-      }
-
-    } else if (isTRUE(is.data.frame(landmarks))) {
-      landmarks <- landmarks
-      file <-
-        tools::file_path_sans_ext(as.character(landmarks$image_base[[1]]))
-
-      if (isFALSE(hasArg(savename))) {
-        savename <-
-          file.path(dirname(as.character(landmarks$image_path[[1]])), paste0(file, '__labels.json'))
-      }
-    }
-
-    tem <-
-      jsonlite::fromJSON(system.file("extdata", "dlib-landmark-mean__labels.json", package = "faceplyr"))
-
-    tem$image_filename <- landmarks$image_base[[1]]
-    tem$labels$position$x <- landmarks$x
-    tem$labels$position$y <- landmarks$y
-
-    if (write_out == TRUE) {
-      jsondf <- jsonlite::toJSON(tem, dataframe = 'row', raw = 'mongo')
-      readr::write_lines(jsondf, savename)
-    } else if (write_out == FALSE) {
-      jsondf <- jsonlite::toJSON(tem, dataframe = 'row', raw = 'mongo')
-      return(jsondf)
-    }
-
-  }
-
-convert_landmarKs.tem <-
+convert_landmarks.tem <-
   function(landmarks, write_out = TRUE, savename) {
     if (isFALSE(is.data.frame(landmarks)) &
         isFALSE(is.character(landmarks))) {

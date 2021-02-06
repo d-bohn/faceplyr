@@ -1,4 +1,4 @@
-#' Read face landmarks
+#' Read face landmarks using Python's dlib
 #'
 #' @description
 #' Functions to read/obtain facial landmarks from files or images.

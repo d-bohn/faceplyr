@@ -7,3 +7,5 @@ numpy==1.18.1
 opencv-python==3.4.8.29
 Pillow==7.0.0
 cmake==3.18.2
+pandas==1.2.1
+scipy==1.6.0

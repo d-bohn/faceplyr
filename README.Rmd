@@ -7,10 +7,12 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE, eval = FALSE, warning = FALSE, error = FALSE, message = FALSE)
 ```
 
-# `faceplyr` <img src="inst/imgs/faceplyr_hex.png" align="right" />
+# `faceplyr` <img src="imgs/faceplyr_hex.png" align="right" />
 
 # Motivation
-Mainly selfish. I wanted to work mostly in the R environment and have R code that performed like I would expect R to perform, but with the performance and breadth of some python image functions I wish R had natively. In a similar vein, I found myself loading multiple R image libraries to perform a set of operations on one image. A single package that brought all of this together under one convenient roof was the main motivating factor for writing this package.
+My motivation is primarily selfish. I wanted to work mostly in the R environment and have R code that performed like I would expect R to perform, but with the performance and breadth of a few Python image functions I wish R had natively. In a similar vein, I found myself loading multiple R image libraries to perform a set of operations on one image. A single package that brought all of this together under one convenient roof was the main motivating factor for writing this package.
+
+This is my first "real" R package, so it is messy. Really messy. I've learned a lot since I started writing this package, and I have hopes of cleaning it up and reducing dependencies in the future (see TODOs). However, as a scientist and not a developer, my main motivation was to get the code I wanted to work rather than preform elegantly.
 
 # Disclaimer
 This package is very much a work in progress and is by no means meant for heavy production use. It started as a private repository of functions that I used regularly in daily work and research. As such, there are many package dependencies that make `faceplyr` quite large and cumbersome. Hopefully in the future I will have to time to parse some of these dependencies. A lot of the "fluff" is because I wanted things to be easy and readable on my end (e.g., `tidyverse`), or look pretty (`cli`), both of which are not good reasons to include in a codebase. However, these don't influence functionality and can ultimately be stripped out in the future. 
@@ -40,7 +42,7 @@ You need to have conda installed with a `faceplyr` environment for this package 
 
 If these are already satisfied (see below) using `faceplyr` should be as simple as:
 
-```{r quick-start, eval = TRUE}
+```{r quick-start, eval = FALSE}
 # install.packages("remotes")
 # remotes::install_github("d-bohn/faceplyr")
 
@@ -88,15 +90,17 @@ extract_structure(image = image, data_save_folder = "./output", return_results =
 
 The above code should result in the image saved to `./output/queen_cropped.png`:
 
-![](inst/imgs/queen_cropped.png)
+![](imgs/queen_cropped.png)
 
 Notice that a `data_save_folder` was specified and `return_results` was set to `FALSE`. This combination will save a `RDS` file to the `./output` folder on your machine where the results from the structure metric function will be written. Alternatively, you can specify `return_results` and it will instead return the output to the console (or an object) and `data_save_folder` will be ignored for saving data, but still needed to save the cropped image.
 
 We can see how well `dlib` did at finding the face metric point locations with the `plot_landmarks` helper function:
 
-```{r plot-landmarks, eval = TRUE}
+```{r plot-landmarks, eval = FALSE}
 plot_landmarks(image = system.file("extdata", "queen.png", package = "faceplyr"))
 ```
+
+![](imgs/plot-landmarks-1.png)
 
 After running `extract_structure` on an image all of the other `extract_*` functions should auto-*magically* work on the same image.
 
@@ -105,4 +109,24 @@ extract_hist_colors(image = image, data_save_folder = "./output")
 
 # → Image complete (color hist): ./output/queen_cropped.png
 ```
+
+# TODO List
+There are a number of "wish list" items that I want to implement in this package. Here is a running list:
+
+- Create `Dockerfile` for easy install on host machines
+  - Major priority
+
+- Reduce overall dependencies
+
+- Cleanup `.R` files
+
+- Cleanup `legacy`, `devel`, and unused Python files in `inst`
+
+- Create "in house" facial landmark classifier to reduce dependencies and speedup landmarking
+  - Major priority
+  - Working on this with R's version of `keras` and a number of facial landmark database
+
+- Estimate facial roundness (e.g., `faceplyr::extract_roundness`, but see, `faceplyr::calc_roundness`)
+
+- Estimate facial angularity (e.g., `faceplyr::extract_angularity`)
 

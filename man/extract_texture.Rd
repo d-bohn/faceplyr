@@ -4,10 +4,10 @@
 \alias{extract_texture}
 \title{Extract texture metric from interior face}
 \usage{
-extract_texture(image, data_save_folder)
+extract_texture(image, data_save_folder, return_results = FALSE)
 }
 \arguments{
-\item{data_save_folder}{}
+\item{return_results}{}
 }
 \value{
 
