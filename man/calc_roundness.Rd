@@ -5,7 +5,7 @@
 \title{Extract roundness of the face}
 \usage{
 calc_roundness(
-  image,
+  image = NULL,
   landmarks = NULL,
   point_select = "face_outline",
   fit = "taubin"

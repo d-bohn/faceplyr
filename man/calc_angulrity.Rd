@@ -4,7 +4,7 @@
 \alias{calc_angulrity}
 \title{Extract angularity of the face}
 \usage{
-calc_angulrity(image, landmarks = NULL)
+calc_angulrity(image = NULL, landmarks = NULL)
 }
 \arguments{
 \item{image}{Image to calculate race roundness}

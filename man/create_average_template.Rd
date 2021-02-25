@@ -15,6 +15,3 @@ create_average_template(files)
 \description{
 Create an average template from multiple templates
 }
-\examples{
-
-}

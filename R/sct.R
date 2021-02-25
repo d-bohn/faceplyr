@@ -5,13 +5,13 @@
 #' @param return_results
 #'
 #' @return
-#' @export
-#'
-#' @examples
+
 #' @import tidyverse
 #' @importFrom tools file_path_sans_ext
 #' @import cli
 #' @import glue
+#'
+#' @export
 extract_structure <- function(image, data_save_folder, return_results = FALSE) {
   vars <- extract_vars(image,
                        data_save_folder = data_save_folder)
@@ -75,13 +75,13 @@ extract_structure <- function(image, data_save_folder, return_results = FALSE) {
 #' @param return_results
 #'
 #' @return
-#' @export
 #'
-#' @examples
 #' @import tidyverse
 #' @importFrom tools file_path_sans_ext
 #' @import cli
 #' @import glue
+#'
+#' @export
 extract_texture <- function(image, data_save_folder, return_results = FALSE) {
   vars <- extract_vars(image,
                        data_save_folder = data_save_folder)
@@ -146,14 +146,14 @@ extract_texture <- function(image, data_save_folder, return_results = FALSE) {
 #' @param kclusts
 #'
 #' @return
-#' @export
 #'
-#' @examples
 #' @import tidyverse
 #' @importFrom imager load.image grayscale
 #' @importFrom tools file_path_sans_ext
 #' @import cli
 #' @import glue
+#'
+#' @export
 extract_kmean_colors <- function(image, data_save_folder, return_results = FALSE,
                                  kclusts = 25) {
 
@@ -219,7 +219,7 @@ extract_kmean_colors <- function(image, data_save_folder, return_results = FALSE
                                      tools::file_path_sans_ext( vars$img_basename ), "_color.RDS"))
         # saveRDS(kmean_center, file.path(folder, savename))
 
-        cli::cli_alert(glu::glue(col_orange("Image complete (color kmeans): {vars$savename}")))
+        cli::cli_alert(glue::glue(col_orange("Image complete (color kmeans): {vars$savename}")))
     }
   }
 }
@@ -231,14 +231,14 @@ extract_kmean_colors <- function(image, data_save_folder, return_results = FALSE
 #' @param return_results
 #'
 #' @return
-#' @export
 #'
-#' @examples
 #' @import tidyverse
 #' @importFrom tools file_path_sans_ext
 #' @import cli
 #' @import glue
 #' @importFrom fs file_exists
+#'
+#' @export
 extract_hist_colors <- function(image, data_save_folder, return_results = FALSE) {
   vars <- extract_vars(image,data_save_folder = data_save_folder)
 
@@ -305,14 +305,14 @@ extract_hist_colors <- function(image, data_save_folder, return_results = FALSE)
 #' @param buffer
 #'
 #' @return
-#' @export
 #'
-#' @examples
 #' @import tidyverse
 #' @importFrom tools file_path_sans_ext
 #' @import cli
 #' @import glue
 #' @import imager
+#'
+#' @export
 extract_luminance <- function(image, data_save_folder, return_results = FALSE, buffer = 2) {
   vars <- extract_vars(image, data_save_folder = data_save_folder)
 
@@ -478,9 +478,8 @@ extract_luminance <- function(image, data_save_folder, return_results = FALSE, b
 #' @param return_results
 #'
 #' @return
-#' @export
 #'
-#' @examples
+#' @export
 extract_elements <- function(image, data_save_folder = "./data", return_results = FALSE) {
 
   extract_structure(image = image, data_save_folder = data_save_folder,

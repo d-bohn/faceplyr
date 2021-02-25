@@ -1,6 +1,6 @@
 Package: faceplyr
 Title: Tools for Facial Image Analysis in R
-Version: 0.3
+Version: 0.3.5
 Authors@R: person("Daniel", "Albohn", email = "d.albohn@gmail.com",
                   role = c("aut", "cre"))
 Description: A suite of R functions for dealing with face images.
@@ -13,6 +13,10 @@ Imports:
     EBImage,
     jsonlite,
     readr,
+    tibble,
+    dplyr,
+    tidyr,
+    magrittr,
     reticulate,
     tools,
     vegan,
@@ -21,7 +25,6 @@ Imports:
     fs,
     glue,
     imager,
-    tidyverse,
     conicfit,
     abind,
-    cli
+    tidyverse

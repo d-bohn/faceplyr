@@ -20,6 +20,3 @@ landmarks file supplied.}
 \description{
 Converts landmarks to JPsychomorph tem file
 }
-\examples{
-
-}

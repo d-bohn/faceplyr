@@ -19,6 +19,3 @@ tem_to_landmarks(tem, write_out = TRUE, savename)
 \description{
 Convert a \code{.tem} file created by JPsychomoprh back to a standard facial landmarks file.
 }
-\examples{
-
-}

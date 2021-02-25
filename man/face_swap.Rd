@@ -20,6 +20,3 @@ Either a numpy matrix or EBImage object.
 \description{
 Swap faces between two images
 }
-\examples{
-
-}

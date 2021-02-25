@@ -17,6 +17,3 @@ transform_points(landmarks1, landmarks2, align_to = c("everything", "eyes"))
 \description{
 Create affine transformation
 }
-\examples{
-
-}

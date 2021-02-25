@@ -19,6 +19,3 @@ Returns vector of size shape*3 in the same order as defined above (blue, green, 
 \description{
 Extract color histogram from face image
 }
-\examples{
-
-}

@@ -5,9 +5,8 @@
 #' @param top Determine top of face by either `eyebrow` or `eyelid`
 #'
 #' @return
-#' @export
 #'
-#' @examples
+#' @export
 calculate_fwhr <- function(points, method = "average", top = "eyebrow") {
   width_left <- points[points$point==0,c("x","y")]
   width_right <- points[points$point==16,c("x","y")]

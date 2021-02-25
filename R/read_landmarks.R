@@ -11,13 +11,8 @@
 #'
 #' @importFrom reticulate import source_python
 #' @importFrom tools file_ext
+#'
 #' @export
-#'
-#' @examples
-#' img <- system.file("extdata", "obama.png", package = "faceplyr")
-#' read_landmarks(img)
-#' read_landmarks("template.tem")
-#'
 read_landmarks <- function(x, ...) {
   m <- tools::file_ext(x)
   class(x) <- append(m, class(x))

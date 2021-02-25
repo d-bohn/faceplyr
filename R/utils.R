@@ -100,17 +100,18 @@ plot_landmarks <- function(landmarks=NULL, image, save=NULL,
       EBImage::flop(.)
   }
 
-  if (with_oval & with_angles) {
-    # TODO: Add angles to plots
-    stop("Not implemented yet.")
-
-  } else if (with_oval) {
+  # Plot with Oval
+  if (with_oval) {
     if (!hasArg(point_select)) {
       point_select <- "face_outline"
+    } else {
+      point_select <- point_select
     }
 
     if (!hasArg(fit)) {
       fit  <- "taubin"
+    } else {
+      fit <- "taubin"
     }
 
     ellip_meas <- ellipse_measures(image = image, landmarks = landmarks,
@@ -129,11 +130,15 @@ plot_landmarks <- function(landmarks=NULL, image, save=NULL,
     points(ellipse_g)
     lines(ellipse_g, col="red")
 
-  } else if (with_angles) {
+  }
+
+  if (with_angles) {
     # TODO: Add angles to plots
     stop("Not implemented yet.")
 
-  } else {
+  }
+
+  if (!with_oval && !with_angles) {
     par(mar=c(0, 0, 0, 0))
     res = dim(img)[1:2]
     plot(1,1,xlim=c(0,res[1]),ylim=c(res[2],0),asp=1,type='n',xaxs='i',yaxs='i',

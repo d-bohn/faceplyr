@@ -17,6 +17,3 @@ warp_face(image, m)
 \description{
 Warp image with affine transformation
 }
-\examples{
-
-}

@@ -9,11 +9,8 @@
 #'
 #' @importFrom reticulate import source_python
 #' @importFrom EBImage readImage
+#'
 #' @export
-#'
-#' @examples
-#'
-
 face_swap <- function(reference, target, convert = FALSE){
 
   py_file <- system.file("python", "face_warp_full.py", package = "faceplyr")
@@ -54,8 +51,6 @@ face_swap <- function(reference, target, convert = FALSE){
 #' @param scale_bottom
 #'
 #' @return
-#'
-#' @examples
 face_crop <- function(image, bb = NULL, savename, return_img = FALSE,
                                       return_bb=FALSE, wh = 200L, scale = TRUE,
                                       scale_left = 0, scale_top=0.5,
@@ -110,9 +105,8 @@ face_crop <- function(image, bb = NULL, savename, return_img = FALSE,
 #' @param transparent
 #'
 #' @return
-#' @export
 #'
-#' @examples
+#' @export
 face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALSE, transparent = TRUE) {
     cv <- reticulate::import("cv2")
 
@@ -152,9 +146,8 @@ face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALS
 #' @param image
 #'
 #' @return
-#' @export
 #'
-#' @examples
+#' @export
 halve_face <- function(image) {
   cv <- reticulate::import("cv2")
 
@@ -173,9 +166,6 @@ halve_face <- function(image) {
 #' @return Returns vector of size shape*3 in the same order as defined above (blue, green, red) for `rgb` and (hue, saturation, value) for `hsv`.
 #'
 #' @export
-#'
-#' @examples
-#'
 face_hist <- function(img, shape = c(8, 8, 8), colorspace = "rgb") {
   # Some checks
   if (!(colorspace %in% c("rgb", "hsv"))) {
@@ -210,10 +200,8 @@ face_hist <- function(img, shape = c(8, 8, 8), colorspace = "rgb") {
 #' @param img
 #'
 #' @return
+#'
 #' @export
-#'
-#' @examples
-#'
 face_texture <- function(img) {
   py_file <- system.file("python", "face_features.py", package = "faceplyr")
   reticulate::source_python(py_file, convert = FALSE)

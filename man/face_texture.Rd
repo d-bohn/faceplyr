@@ -15,6 +15,3 @@ face_texture(img)
 \description{
 Extract Haralick texture features from face image
 }
-\examples{
-
-}

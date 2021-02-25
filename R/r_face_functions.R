@@ -5,10 +5,8 @@
 #'
 #' @return
 #' @importFrom vegan procrustes
+#'
 #' @export
-#'
-#' @examples
-#'
 transform_points <- function(landmarks1, landmarks2, align_to = c("everything", "eyes")) {
   if (align_to == "everything") {
     landmarks1 <- landmarks1[c('x', 'y')]
@@ -38,10 +36,8 @@ transform_points <- function(landmarks1, landmarks2, align_to = c("everything", 
 #'
 #' @return
 #' @importFrom EBImage affine readImage as.Image
+
 #' @export
-#'
-#' @examples
-#'
 warp_face <- function(image, m) {
 
   if (is.character(image)) {
@@ -64,10 +60,8 @@ warp_face <- function(image, m) {
 #'
 #' @return
 #' @importfrom abind abind
+#'
 #' @export
-#'
-#' @examples
-#'
 create_average_template <- function(files) {
   mat3d <- NULL
   for (file in 1:length(files)) {
@@ -90,8 +84,6 @@ create_average_template <- function(files) {
 #' @importFrom readr write_delim
 #' @importFrom tools file_path_sans_ext
 #' @export
-#'
-#' @examples
 #'
 landmarks_to_tem <- function(landmarks, write_out = TRUE, savename) {
   if (!(is.data.frame(landmarks)) & !(is.character(landmarks))) {
@@ -131,10 +123,8 @@ landmarks_to_tem <- function(landmarks, write_out = TRUE, savename) {
 #' @param savename File save name without extension (optional).
 #'
 #' @return
+#'
 #' @export
-#'
-#' @examples
-#'
 tem_to_landmarks <- function(tem, write_out = TRUE, savename) {
 
   if (endsWith(tem, '.tem')) {
@@ -185,9 +175,8 @@ tem_to_landmarks <- function(tem, write_out = TRUE, savename) {
 #'
 #' 69th point is estimated by taking the face width (dlib points 2 & 14) and
 #' multiplying it by 1.5.
-#' @export
 #'
-#' @examples
+#' @export
 add_face_point <- function(template, write_out = c('tem','console')) {
   landmarks <- suppressWarnings( read_landmarks(template) )
 

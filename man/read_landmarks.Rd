@@ -18,9 +18,3 @@ Data frame of type \code{landmarks} with 68 facial landmarks.
 \description{
 Functions to read/obtain facial landmarks from files or images.
 }
-\examples{
-img <- system.file("extdata", "obama.png", package = "faceplyr")
-read_landmarks(img)
-read_landmarks("template.tem")
-
-}

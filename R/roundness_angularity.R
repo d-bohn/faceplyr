@@ -24,10 +24,11 @@
 #' }
 #'
 #' @importFrom conicfit EllipseFitByTaubin EllipseDirectFit AtoG calculateEllipse
-#' @import tidyverse
+#' @import magrittr
+#' @importFrom tibble tibble
 #'
 #' @export
-calc_roundness <- function(image, landmarks = NULL, point_select = "face_outline", fit = "taubin") {
+calc_roundness <- function(image = NULL, landmarks = NULL, point_select = "face_outline", fit = "taubin") {
 
   elip_meas <- ellipse_measures(
     image = image,
@@ -46,7 +47,7 @@ calc_roundness <- function(image, landmarks = NULL, point_select = "face_outline
   roundness2 <- (4 * elip_meas$area)/(pi * elip_meas$R_major^2)
   circularity2 <- (4*pi*elip_meas$area)/elip_meas$parimeter
 
-  return(data.frame(
+  return(tibble::tibble(
     roundess1 = roundness1,
     roundness2 = roundness2,
     circularity1 = circularity1,
@@ -55,7 +56,6 @@ calc_roundness <- function(image, landmarks = NULL, point_select = "face_outline
 }
 
 # Face Angularity ----
-
 #' Extract angularity of the face
 #'
 #' @param image Image to calculate race roundness
@@ -64,15 +64,35 @@ calc_roundness <- function(image, landmarks = NULL, point_select = "face_outline
 #' #' @return Dataframe with angularity values for the provided image. See details
 #' for what each named value corresponds with.
 #'
-#' @import tidyverse
+#' @importFrom tibble tibble
+#' @import magrittr
 #'
 #' @export
-calc_angulrity <- function(image, landmarks = NULL) {
+calc_angulrity <- function(image = NULL, landmarks = NULL) {
   # [right, mid, left] (x,y) points
   # Top half angle [1, (21+22)/2, 15]
   # Bottom half angle [1, 8, 15]
 
-  stop("Not implemented yet.")
+  if (is.null(landmarks)) {
+    landmarks <- read_landmarks(images)
+
+  } else {
+    landmarks <- landmarks
+  }
+
+  if (is.null(image) && is.null(landmarks)) stop("Must supply image or landmarks")
+
+  upper_pts <- angle_pts(landmarks = landmarks, location = "top")
+  upper_rads <- estimate_angle(pts = upper_pts)
+
+  lower_pts <- angle_pts(landmarks = landmarks, location = "bottom")
+  lower_rads <- estimate_angle(pts = lower_pts)
+
+  return(tibble::tibble(
+    upper_angle = (upper_rads * (180/pi)),
+    lower_angle = (lower_rads * (180/pi))
+  ))
+
 }
 
 # Helper Functions ----
@@ -162,5 +182,62 @@ ellipse_measures <- function(image, landmarks = NULL,
     ellipse_geometry = ems$ellipse_geometry,
     ellipse_pt_est = ems$ellipse_pt_est
   ))
+
+}
+
+# [right, mid, left] (x,y) points
+# Top half angle [1, (21+22)/2, 15]
+# Bottom half angle [1, 8, 15]
+angle_pts <- function(landmarks, location = "top") {
+  if (location == "top") {
+    p1_1 <- landmarks[landmarks$point == 21,]
+    p1_2 <- landmarks[landmarks$point == 22,]
+    p2 <- landmarks[landmarks$point == 1,]
+    p3 <- landmarks[landmarks$point == 15,]
+
+    p1x <- (p1_1$x+p1_2$x)/2
+    p1y <- (p1_1$y+p1_2$y)/2
+    p2x <- p2$x
+    p2y <- p2$y
+    p3x <- p3$x
+    p3y <- p3$y
+  }
+
+  if (location == "bottom") {
+    p1 <- landmarks[landmarks$point == 1,]
+    p2 <- landmarks[landmarks$point == 8,]
+    p3 <- landmarks[landmarks$point == 15,]
+
+    p1x <- p1$x
+    p1y <- p1$y
+    p2x <- p2$x
+    p2y <- p2$y
+    p3x <- p3$x
+    p3y <- p3$y
+  }
+
+  return(list(
+    p1x = p1x,
+    p1y = p1y,
+    p2x = p2x,
+    p2y = p2y,
+    p3x = p3x,
+    p3y = p3y
+  ))
+
+}
+
+# p1 is middle point
+estimate_angle <- function(pts) {
+
+  vec_length <- function(p1x, p1y, p2x, p2y) {
+    sqrt((p1x-p2x)^2 + (p1y-p2y)^2)
+  }
+
+  p12 <- vec_length(pts$p1x, pts$p1y, pts$p2x, pts$p2y)
+  p13 <- vec_length(pts$p1x, pts$p1y, pts$p3x, pts$p3y)
+  p23 <- vec_length(pts$p2x, pts$p2y, pts$p3x, pts$p3y)
+
+  acos((p12^2 + p13^2 - p23^2)/(2 * p12 * p13))
 
 }
