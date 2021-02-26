@@ -13,11 +13,12 @@ loading multiple R image libraries to perform a set of operations on one
 image. A single package that brought all of this together under one
 convenient roof was the main motivating factor for writing this package.
 
-This is my first “real” R package, so it is messy. Really messy. I’ve
-learned a lot since I started writing this package, and I have hopes of
-cleaning it up and reducing dependencies in the future (see TODOs).
-However, as a scientist and not a developer, my main motivation was to
-get the code I wanted to work rather than preform elegantly.
+This project started as part of my my first “real” R package many years
+ago, so it is messy. Really messy. I’ve learned a lot since I started
+writing this package, and I have hopes of cleaning it up and reducing
+dependencies in the future (see TODOs). However, as a scientist and not
+a developer, my main motivation was to get the code I wanted to work
+rather than preform elegantly.
 
 # Disclaimer
 
@@ -183,18 +184,16 @@ package. Here is a running list:
 
 -   Reduce overall dependencies
 
+    -   Create “in house” facial landmark classifier to reduce
+        dependencies and speedup landmarking
+        -   Major priority
+
 -   Cleanup `.R` files
 
 -   Cleanup `legacy`, `devel`, and unused Python files in `inst`
 
--   Create “in house” facial landmark classifier to reduce dependencies
-    and speedup landmarking
+-   ~~Estimate facial roundness (e.g., `faceplyr::extract_roundness`,
+    but see, `faceplyr::calc_roundness`)~~ Complete.
 
-    -   Major priority
-    -   Working on this with R’s version of `keras` and a number of
-        facial landmark database
-
--   Estimate facial roundness (e.g., `faceplyr::extract_roundness`, but
-    see, `faceplyr::calc_roundness`)
-
--   Estimate facial angularity (e.g., `faceplyr::extract_angularity`)
+-   ~~Estimate facial angularity (e.g.,
+    `faceplyr::extract_angularity`)~~ Complete.
