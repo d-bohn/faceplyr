@@ -12,7 +12,7 @@
 #' @import glue
 #'
 #' @export
-extract_structure <- function(image, data_save_folder, return_results = FALSE) {
+extract_structure <- function(image, data_save_folder = NULL, return_results = FALSE) {
   vars <- extract_vars(image,
                        data_save_folder = data_save_folder)
 
@@ -82,7 +82,7 @@ extract_structure <- function(image, data_save_folder, return_results = FALSE) {
 #' @import glue
 #'
 #' @export
-extract_texture <- function(image, data_save_folder, return_results = FALSE) {
+extract_texture <- function(image, data_save_folder = NULL, return_results = FALSE) {
   vars <- extract_vars(image,
                        data_save_folder = data_save_folder)
 
@@ -154,7 +154,7 @@ extract_texture <- function(image, data_save_folder, return_results = FALSE) {
 #' @import glue
 #'
 #' @export
-extract_kmean_colors <- function(image, data_save_folder, return_results = FALSE,
+extract_kmean_colors <- function(image, data_save_folder = NULL, return_results = FALSE,
                                  kclusts = 25) {
 
   vars <- extract_vars(image, data_save_folder = data_save_folder)
@@ -239,7 +239,7 @@ extract_kmean_colors <- function(image, data_save_folder, return_results = FALSE
 #' @importFrom fs file_exists
 #'
 #' @export
-extract_hist_colors <- function(image, data_save_folder, return_results = FALSE) {
+extract_hist_colors <- function(image, data_save_folder = NULL, return_results = FALSE) {
   vars <- extract_vars(image,data_save_folder = data_save_folder)
 
   if (fs::file_exists(vars$savename)) {
@@ -313,7 +313,7 @@ extract_hist_colors <- function(image, data_save_folder, return_results = FALSE)
 #' @import imager
 #'
 #' @export
-extract_luminance <- function(image, data_save_folder, return_results = FALSE, buffer = 2) {
+extract_luminance <- function(image, data_save_folder = NULL, return_results = FALSE, buffer = 2) {
   vars <- extract_vars(image, data_save_folder = data_save_folder)
 
   # This requires facial landmarks

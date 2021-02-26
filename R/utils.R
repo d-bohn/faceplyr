@@ -33,7 +33,7 @@ remove_background <- function(image, savename, return_img = FALSE) {
 }
 
 #' @export
-extract_vars <- function(image, extract_emotion = FALSE, data_save_folder = "./output"){
+extract_vars <- function(image, extract_emotion = FALSE, data_save_folder){
 
   if (str_detect(image, "~")) {
     stop("Must supply absolute or relative path to image; no shortcuts (i.e., `~`)")
@@ -42,7 +42,13 @@ extract_vars <- function(image, extract_emotion = FALSE, data_save_folder = "./o
   img <- image
   img_basename <- basename(img)
 
-  data_save_folder <- data_save_folder
+  if (is.null(data_save_folder)) {
+    data_save_folder <- "."
+
+  } else {
+    data_save_folder <- data_save_folder
+  }
+
 
   if (extract_emotion) {
     emotion <- str_extract(img, emo_labels()) %>% tools::toTitleCase(.)
