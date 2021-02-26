@@ -13,11 +13,11 @@ loading multiple R image libraries to perform a set of operations on one
 image. A single package that brought all of this together under one
 convenient roof was the main motivating factor for writing this package.
 
-This project started as part of my my first “real” R package many years
+This project started as part of my first “real” R package many years
 ago, so it is messy. Really messy. I’ve learned a lot since I started
 writing this package, and I have hopes of cleaning it up and reducing
-dependencies in the future (see TODOs). However, as a scientist and not
-a developer, my main motivation was to get the code I wanted to work
+dependencies in the future (see `TODOs`). However, as a scientist and
+not a developer, my main motivation was to get the code I wanted to work
 rather than preform elegantly.
 
 # Disclaimer
