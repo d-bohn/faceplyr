@@ -107,7 +107,7 @@ face_crop <- function(image, bb = NULL, savename, return_img = FALSE,
 #' @return
 #'
 #' @export
-face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALSE, transparent = TRUE) {
+face_mask <- function(image, bb = NULL, crop = TRUE, savename = NULL, return_img = FALSE, transparent = TRUE) {
     cv <- reticulate::import("cv2")
 
     py_file <- system.file("python", "face_mask.py", package = "faceplyr")
@@ -137,7 +137,10 @@ face_mask <- function(image, bb = NULL, crop = TRUE, savename, return_img = FALS
       return(masked_face)
 
     } else {
-      cv$imwrite(savename, masked_face)
+      if (!is.null(savename)) {
+        cv$imwrite(savename, masked_face)
+      } else stop()
+
     }
 }
 

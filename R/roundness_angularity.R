@@ -28,7 +28,9 @@
 #' @importFrom tibble tibble
 #'
 #' @export
-calc_roundness <- function(image = NULL, landmarks = NULL, point_select = "face_outline", fit = "taubin") {
+calc_roundness <- function(image = NULL, landmarks = NULL,
+                           point_select = "face_outline",
+                           fit = "taubin") {
 
   elip_meas <- ellipse_measures(
     image = image,
@@ -68,13 +70,13 @@ calc_roundness <- function(image = NULL, landmarks = NULL, point_select = "face_
 #' @import magrittr
 #'
 #' @export
-calc_angulrity <- function(image = NULL, landmarks = NULL) {
+calc_angularity <- function(image = NULL, landmarks = NULL) {
   # [right, mid, left] (x,y) points
   # Top half angle [1, (21+22)/2, 15]
   # Bottom half angle [1, 8, 15]
 
   if (is.null(landmarks)) {
-    landmarks <- read_landmarks(images)
+    landmarks <- read_landmarks(image)
 
   } else {
     landmarks <- landmarks

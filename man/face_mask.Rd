@@ -8,7 +8,7 @@ face_mask(
   image,
   bb = NULL,
   crop = TRUE,
-  savename,
+  savename = NULL,
   return_img = FALSE,
   transparent = TRUE
 )

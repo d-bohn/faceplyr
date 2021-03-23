@@ -2,28 +2,24 @@
 #'
 #' @param image
 #' @param data_save_folder
-#' @param sqlite_db
 #' @param return_results
 #'
 #' @return
-#'
+
 #' @import tidyverse
 #' @importFrom tools file_path_sans_ext
 #' @import cli
 #' @import glue
 #'
 #' @export
-extract_structure <- function(image,
-                              data_save_folder = data_save_folder,
-                              sqlite_db = NULL,
-                              return_results = FALSE) {
+extract_structure <- function(image, data_save_folder = NULL, return_results = FALSE) {
+  vars <- extract_vars(image,
+                       data_save_folder = data_save_folder)
 
   # TODO: Add option to not mask face
   # mask <- tempfile(fileext='.png')
-  savename <- glue::glue("{data_save_folder}/{basename(image)}_cropped.png")
-
   mask <- tryCatch({
-    face_mask(image = image, savename = savename, return_img = FALSE, crop = TRUE, transparent = TRUE)
+    face_mask(image = image, savename = vars$savename, crop = TRUE, transparent = TRUE)
 
   }, warning = function(w) {
     message(sprintf("Warning in %s: %s", deparse(w[["call"]]), w[["message"]]))
@@ -36,7 +32,7 @@ extract_structure <- function(image,
 
     # ** Extract keypoints ----
     struct <- tryCatch({
-      mask_points <- faceplyr::read_landmarks(savename)
+      mask_points <- faceplyr::read_landmarks(vars$savename)
 
       structure <- mask_points %>%
         as_tibble(.) %>%
@@ -62,13 +58,11 @@ extract_structure <- function(image,
       if (return_results) {
         return(structure)
 
-      } else if (!is.null(sqlite_db) & !return_results) {
-        write_sqlite(structure, "structure", save_file = sqlite_db)
+        } else {
+          saveRDS(struct, paste0(data_save_folder, "/",
+                                 tools::file_path_sans_ext( vars$img_basename), "_structure.RDS"))
 
-        cli::cli_alert(glue::glue(cli::col_blue("Image complete (structure): {savename}")))
-
-      } else {
-        stop("must supply sqlite_db or return results TRUE.")
+          cli::cli_alert(glue::glue(cli::col_blue("Image complete (structure): {vars$savename}")))
       }
     }
   }
@@ -78,7 +72,6 @@ extract_structure <- function(image,
 #'
 #' @param image
 #' @param data_save_folder
-#' @param sqlite_db
 #' @param return_results
 #'
 #' @return
@@ -89,20 +82,17 @@ extract_structure <- function(image,
 #' @import glue
 #'
 #' @export
-extract_texture <- function(image,
-                            data_save_folder = data_save_folder,
-                            sqlite_db = NULL,
-                            return_results = FALSE) {
+extract_texture <- function(image, data_save_folder = NULL, return_results = FALSE) {
+  vars <- extract_vars(image,
+                       data_save_folder = data_save_folder)
 
-  savename <- glue::glue("{data_save_folder}/{basename(image)}_cropped.png")
-
-  if (fs::file_exists(savename)) {
+  if (fs::file_exists(vars$savename)) {
 
     tex <- tryCatch({
-      halve_face(savename)
+      halve_face(vars$savename)
 
-      bot_img <- paste0(tools::file_path_sans_ext(savename),"_bottom.",tools::file_ext(savename))
-      top_img <- paste0(tools::file_path_sans_ext(savename),"_top.",tools::file_ext(savename))
+      bot_img <- paste0(tools::file_path_sans_ext(vars$savename),"_bottom.",tools::file_ext(vars$savename))
+      top_img <- paste0(tools::file_path_sans_ext(vars$savename),"_top.",tools::file_ext(vars$savename))
 
       remove_background(bot_img, savename = bot_img, return_img = FALSE)
       remove_background(top_img, savename = top_img, return_img = FALSE)
@@ -119,10 +109,11 @@ extract_texture <- function(image,
         unite(., key, key, number) %>%
         spread(., key, value) %>%
         mutate(.,
-               image = image,
-               image_base = basename(image)
+               image = unique(vars$img),
+               image_base = unique(vars$img_basename),
+               emotion = vars$emotion
         ) %>%
-        select(., image, image_base, everything())
+        select(., image, image_base, emotion, everything())
 
     }, warning = function(w) {
       message(sprintf("Warning in %s: %s", deparse(w[["call"]]), w[["message"]]))
@@ -134,15 +125,14 @@ extract_texture <- function(image,
 
     if (!is.null(tex)) {
 
-      if (return_results) {
+       if (return_results) {
         return(texture2)
 
-      } else if (!is.null(sqlite_db) & !return_results) {
-        write_sqlite(texture2, "texture", save_file = sqlite_db)
+        } else {
+          saveRDS(texture2, paste0(data_save_folder, "/",
+                                   tools::file_path_sans_ext( vars$img_basename), "_texture.RDS"))
 
-        cli::cli_alert(glue::glue(cli::col_green("Image complete (texture): {savename}")))
-      } else {
-        stop("must supply sqlite_db or return results TRUE.")
+          cli::cli_alert(glue::glue(cli::col_green("Image complete (texture): {vars$savename}")))
       }
     }
   }
@@ -152,7 +142,6 @@ extract_texture <- function(image,
 #'
 #' @param image
 #' @param data_save_folder
-#' @param sqlite_db
 #' @param return_results
 #' @param kclusts
 #'
@@ -165,17 +154,14 @@ extract_texture <- function(image,
 #' @import glue
 #'
 #' @export
-extract_kmean_colors <- function(image,
-                                 data_save_folder = data_save_folder,
-                                 sqlite_db = NULL,
-                                 return_results = FALSE,
+extract_kmean_colors <- function(image, data_save_folder = NULL, return_results = FALSE,
                                  kclusts = 25) {
 
-  savename <- glue::glue("{data_save_folder}/{basename(image)}_cropped.png")
+  vars <- extract_vars(image, data_save_folder = data_save_folder)
 
-  if (fs::file_exists(savename)) {
+  if (fs::file_exists(vars$savename)) {
     # Load up the image using load.image function!
-    im <- imager::load.image(savename)
+    im <- load.image(vars$savename)
 
     folder <- data_save_folder
 
@@ -184,7 +170,7 @@ extract_kmean_colors <- function(image,
 
     ## If df is too big, it's too slow to process on my computer, so shrink the image
     shrink_ratio  <- if(df_size > max_row_num) {max_row_num / df_size } else {1}
-    im <- im %>% imager::imresize(shrink_ratio)
+    im <- im %>% imresize(shrink_ratio)
 
     ## get RGB value at each pixel
     im_rgb <- im %>%
@@ -195,9 +181,9 @@ extract_kmean_colors <- function(image,
     ## turn image into Grayscale and get luminance "value" too.
     im_gray <- im %>%
       {if (dim(im)[[4]] != 3) {
-        imager::rm.alpha(im)
+        rm.alpha(im)
       }} %>%
-      imager::grayscale() %>%
+      grayscale() %>%
       as.data.frame()
 
     ## combine RGB info and Luminance Value Dataset together.
@@ -222,25 +208,18 @@ extract_kmean_colors <- function(image,
     kmean_center <- kmean_rgb$centers %>% as.data.frame() %>%
       mutate(cluster_num = row_number()) %>%
       inner_join(im_df %>% count(cluster_num)) %>%
-      mutate(., image = image,
-             image_base = basename(image)) %>%
-      select(., image, image_base, everything())
-
-    color_wide <- kmean_center %>%
-      select(., image, image_base, red, green, blue, cluster_num) %>%
-      gather(., color, value, -c("image", "image_base", "cluster_num")) %>%
-      unite(., color, color, cluster_num) %>%
-      spread(., color, value)
+      mutate(., image_base = vars$img_basename,
+             path = vars$img) %>%
+      select(., image_base, everything())
 
     if (return_results) {
-      return(color_wide)
+      return(kmeans_center)
+      } else {
+        saveRDS(kmean_center, paste0(data_save_folder, "/",
+                                     tools::file_path_sans_ext( vars$img_basename ), "_color.RDS"))
+        # saveRDS(kmean_center, file.path(folder, savename))
 
-    } else if (!is.null(sqlite_db) & !return_results) {
-      write_sqlite(color_wide, "color_kmeans", save_file = sqlite_db)
-
-      cli::cli_alert(glue::glue(col_orange("Image complete (color kmeans): {savename}")))
-    } else {
-      stop("must supply sqlite_db or return results TRUE.")
+        cli::cli_alert(glue::glue(col_orange("Image complete (color kmeans): {vars$savename}")))
     }
   }
 }
@@ -249,7 +228,6 @@ extract_kmean_colors <- function(image,
 #'
 #' @param image
 #' @param data_save_folder
-#' @param sqlite_db
 #' @param return_results
 #'
 #' @return
@@ -261,19 +239,14 @@ extract_kmean_colors <- function(image,
 #' @importFrom fs file_exists
 #'
 #' @export
-extract_hist_colors <- function(image,
-                                data_save_folder = data_save_folder,
-                                sqlite_db = NULL,
-                                return_results = FALSE,
-                                bins = 32) {
+extract_hist_colors <- function(image, data_save_folder = NULL, return_results = FALSE) {
+  vars <- extract_vars(image,data_save_folder = data_save_folder)
 
-  savename <- glue::glue("{data_save_folder}/{basename(image)}_cropped.png")
-
-  if (fs::file_exists(savename)) {
-    shape <- bins
+  if (fs::file_exists(vars$savename)) {
+    shape <- 32
 
     col <- tryCatch({
-      color <- face_hist(savename, shape = c(shape,shape,shape))
+      color <- face_hist(vars$savename, shape = c(shape,shape,shape))
       color <- tibble(color=array(color),
                       number = 1:length(color))
 
@@ -295,9 +268,10 @@ extract_hist_colors <- function(image,
         )) %>%
         group_by(., color) %>%
         mutate(., bin = 1:shape) %>%
-        mutate(., image = image,
-               image_base = basename(image)) %>%
-        select(., image, image_base, everything(), -key)
+        mutate(., image = vars$img,
+               image_base = vars$img_basename,
+               emotion = vars$emotion) %>%
+        select(., image, image_base, emotion, everything(), -key)
 
     }, warning = function(w) {
       message(sprintf("Warning in %s: %s", deparse(w[["call"]]), w[["message"]]))
@@ -306,19 +280,18 @@ extract_hist_colors <- function(image,
 
     })
 
-    color_hist <- color2 %>%
-      select(., image, image_base, color, number, value) %>%
-      unite(., color_num, color, number, sep = "_hist_") %>%
-      spread(., color_num, value)
-
     if (!is.null(col)) {
+
       if (return_results) {
-        return(color_hist)
+        return(col)
 
-      } else if (!is.null(sqlite_db) & !return_results) {
-        write_sqlite(color_hist, "color_hist", save_file = sqlite_db)
+      } else {
+        # color_metrics_train <- rbind(color_metrics_train, color2)
+        saveRDS(col,
+                paste0(data_save_folder, "/",
+                       tools::file_path_sans_ext( vars$img_basename ), "_color_hist.RDS"))
 
-        cli::cli_alert(glue::glue(col_orange("Image complete (color hist): {savename}")))
+        cli::cli_alert(glue::glue(col_orange("Image complete (color hist): {vars$savename}")))
       }
     }
   }
@@ -328,7 +301,6 @@ extract_hist_colors <- function(image,
 #'
 #' @param image
 #' @param data_save_folder
-#' @param sqlite_db
 #' @param return_results
 #' @param buffer
 #'
@@ -341,13 +313,8 @@ extract_hist_colors <- function(image,
 #' @import imager
 #'
 #' @export
-extract_luminance <- function(image,
-                              data_save_folder = data_save_folder,
-                              sqlite_db = NULL,
-                              return_results = FALSE,
-                              buffer = 2) {
-
-  savename <- glue::glue("{data_save_folder}/{basename(image)}_cropped.png")
+extract_luminance <- function(image, data_save_folder = NULL, return_results = FALSE, buffer = 2) {
+  vars <- extract_vars(image, data_save_folder = data_save_folder)
 
   # This requires facial landmarks
   # Look for dlib's points [x,y]:
@@ -355,10 +322,10 @@ extract_luminance <- function(image,
   ## - Left cheek: [24, (14+30)/2]
   ## - Forehead: [27, (21+22)/2]
 
-  if (fs::file_exists(savename)) {
+  if (fs::file_exists(vars$savename)) {
 
     # Get landmarks for left, right cheek, forehead
-    landmarks <- faceplyr::read_landmarks(savename)
+    landmarks <- faceplyr::read_landmarks(vars$savename)
 
     right_cheek_y1 <- landmarks[landmarks$point==2,"y"]
     right_cheek_y2 <- landmarks[landmarks$point==30,"y"]
@@ -385,14 +352,14 @@ extract_luminance <- function(image,
     )
 
     # Load image and extract RGBs
-    img <- imager::load.image(savename)
+    image <- imager::load.image(vars$savename)
 
-    image_channels <- imager::channels(img)
+    image_channels <- imager::channels(image)
 
     if (length(image_channels) == 3 | length(image_channels) == 4) {
-      red_layer <- imager::R(img)
-      green_layer <- imager::G(img)
-      blue_layer <- imager::B(img)
+      red_layer <- imager::R(image)
+      green_layer <- imager::G(image)
+      blue_layer <- imager::B(image)
 
       # red_layer <- image_channels$c.1
       # green_layer <- image_channels$c.2
@@ -447,8 +414,8 @@ extract_luminance <- function(image,
 
       # Combine raw RGB values and lum values
       lum2 <- tibble(
-        image = image,
-        image_base = basename(image),
+        image = vars$img,
+        image_base = vars$img_basename,
         # RGB
         right_cheek_red = mean(right_cheek_red),
         right_cheek_green = mean(right_cheek_green),
@@ -489,72 +456,17 @@ extract_luminance <- function(image,
     }
 
     if (!is.null(lum2)) {
-      if (return_results) {
+
+       if (return_results) {
         return(lum2)
 
-      } else if (!is.null(sqlite_db) & !return_results) {
-        write_sqlite(lum2, "color_lum", save_file = sqlite_db)
-
-        cli::cli_alert(glue::glue(col_orange("Image complete (color luminance): {savename}")))
       } else {
-        stop("must supply sqlite_db or return results TRUE.")
+        saveRDS(lum2,
+                paste0(data_save_folder, "/",
+                       tools::file_path_sans_ext( vars$img_basename ), "_color_lum.RDS"))
+
+        cli::cli_alert(glue::glue(col_orange("Image complete (color luminance): {vars$savename}")))
       }
-    }
-  }
-}
-
-extract_roundness <- function(image = image,
-                              landmarks = landmarks,
-                              point_select = "face_outline",
-                              fit = "taubin",
-                              data_save_folder = data_save_folder,
-                              sqlite_db = sqlite_db,
-                              return_results = return_results) {
-
-  savename <- glue::glue("{data_save_folder}/{basename(image)}_cropped.png")
-
-  round <- calc_roundness(image = image, point_select = point_select,
-                          landmarks = landmarks, fit = fit) %>%
-    mutate(., image = image,
-           image_base = basename(image)) %>%
-    select(., image, image_base, everything())
-
-  if (!is.null(round)) {
-    if (return_results) {
-      return(round)
-
-    } else if (!is.null(sqlite_db) & !return_results) {
-      write_sqlite(round, "roundness", save_file = sqlite_db)
-
-      cli::cli_alert(glue::glue(cli::col_red("Image complete (roundness): {savename}")))
-    }
-  }
-}
-
-extract_angularity <- function(image = image,
-                               landmarks = landmarks,
-                               data_save_folder = data_save_folder,
-                               sqlite_db = sqlite_db,
-                               return_results = return_results) {
-
-  savename <- glue::glue("{data_save_folder}/{basename(image)}_cropped.png")
-
-  angle <- calc_angularity(image = image,landmarks = landmarks) %>%
-    mutate(., image = image,
-           image_base = basename(image)) %>%
-    select(., image, image_base, everything())
-
-  if (!is.null(angle)) {
-    if (return_results) {
-      return(angle)
-
-    } else if (!is.null(sqlite_db) & !return_results) {
-      write_sqlite(angle, "angularity", save_file = sqlite_db)
-
-      cli::cli_alert(glue::glue(cli::col_red("Image complete (angularity): {savename}")))
-
-    } else {
-      stop("must supply sqlite_db or return results TRUE.")
     }
   }
 }
@@ -564,51 +476,31 @@ extract_angularity <- function(image = image,
 #' @param image
 #' @param data_save_folder
 #' @param return_results
-#' @param dbname
-#' @param landmarks
-#' @param return_results
 #'
 #' @return
 #'
 #' @export
-extract_elements <- function(image, data_save_folder = NULL, dbname = "face_features",
-                             return_results = FALSE, landmarks = NULL)
-{
+extract_elements <- function(image, data_save_folder = "./data", return_results = FALSE) {
 
-  # Setup
-  dt <- format(Sys.Date(), "%m-%d-%Y")
-  data_save_folder <- data_save_folder
-  sqlite_db <- get_sqlite_db(data_save_folder = data_save_folder, dbname = glue::glue("{dbname}-{dt}"))
-  write_meta_sqlite(image = image, save_file = sqlite_db)
-
-  # Extraction
   extract_structure(image = image, data_save_folder = data_save_folder,
-                    sqlite_db = sqlite_db, return_results = return_results)
+                    return_results = return_results)
 
   extract_texture(image = image, data_save_folder = data_save_folder,
-                  sqlite_db = sqlite_db, return_results = return_results)
+                  return_results = return_results)
 
   extract_kmean_colors(image = image, data_save_folder = data_save_folder,
-                       sqlite_db = sqlite_db, return_results = return_results,
-                       kclust = 25)
+                       return_results = return_results, kclust = 25)
 
   extract_hist_colors(image = image, data_save_folder = data_save_folder,
-                      sqlite_db = sqlite_db, return_results = return_results)
+                      return_results = return_results)
 
   ## [x] TODO: add luminance function
   extract_luminance(image = image, data_save_folder = data_save_folder,
-                    sqlite_db = sqlite_db, return_results = return_results)
+                      return_results = return_results)
 
-  ## [x] TODO: add roundness/angularity
-  if (!is.null(landmarks)) {
-    landmarks <- landmarks
-  }
-
-  extract_roundness(image = image, landmarks = landmarks, data_save_folder = data_save_folder,
-                    sqlite_db = sqlite_db, return_results = return_results)
-
-  extract_angularity(image = image, landmarks = landmarks, data_save_folder = data_save_folder,
-                     sqlite_db = sqlite_db, return_results = return_results)
+  ## [] TODO: add roundness/angularity
+  # extract_roundness(image = image, landmarks = landmarks, return_results = return_results)
+  # extract_angularity(image = image, landmarks = landmarks, return_results = return_results)
 
   ## [] TODO: add expansion/constriction
   # extract_expand_constrict(image = image, landmarks = landmarks, return_results = return_results

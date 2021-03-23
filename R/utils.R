@@ -85,6 +85,91 @@ extract_vars <- function(image, extract_emotion = FALSE, data_save_folder){
 
 }
 
+get_sqlite_db <- function(data_save_folder = NULL, dbname = NULL) {
+  if (is.null(data_save_folder)) {
+    data_save_folder <- getwd()
+
+  } else {
+    data_save_folder <- data_save_folder
+  }
+
+  if (is.null(dbname)) {
+    dbname <- glue::glue("face_features.sqlite")
+
+  } else {
+    dbname <- paste0(gsub(".sqlite","",dbname),".sqlite")
+  }
+
+  return(fs::path(data_save_folder, dbname))
+
+}
+
+read_sqlite <- function(table = NULL, save_file) {
+  on.exit(DBI::dbDisconnect(conn))
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), save_file)
+
+  if (is.null(table)) {
+    return(RSQLite::dbListTables(conn))
+
+  } else {
+    table <- RSQLite::dbReadTable(conn, table)
+    return(table)
+
+  }
+}
+
+write_sqlite <- function(data = NULL, table = NULL, save_file, overwrite = FALSE, append = FALSE) {
+  on.exit(DBI::dbDisconnect(conn))
+
+  conn <- DBI::dbConnect(RSQLite::SQLite(), save_file)
+
+  if (overwrite) {
+    RSQLite::dbWriteTable(conn, table, data, ovewrite = TRUE, append = append)
+
+  } else if (append) {
+    RSQLite::dbWriteTable(conn, table, data, ovewrite = FALSE, append = TRUE)
+
+  } else if (fs::file_exists(save_file)) {
+    RSQLite::dbWriteTable(conn, table, data, ovewrite = FALSE, append = TRUE)
+
+  } else {
+    RSQLite::dbWriteTable(conn, table, data, ovewrite = overwrite, append = append)
+  }
+
+}
+
+write_meta_sqlite <- function(image, save_file = NULL, append = FALSE) {
+  if (stringr::str_detect(image, "~")) {
+    stop("Must supply absolute or relative path to image; no shortcuts (i.e., `~`)")
+  }
+
+  if (is.null(save_file)) {
+    save_file <- fs::path(getwd(), "face_features")
+    save_folder <- dirname(save_file)
+
+  } else {
+    save_folder <- dirname(save_file)
+  }
+
+  image_base <- basename(image)
+  image_ext <- tools::file_ext( basename(image) )
+  image_sans_ext <- tools::file_path_sans_ext(image_base)
+
+  meta <- tibble::tibble(
+    image_path = image,
+    image_base = image_base,
+    image_sans_ext = image_sans_ext,
+    image_ext = image_ext,
+    cropped_image_path = glue::glue("{save_folder}/{image_sans_ext}_cropped.{image_ext}"),
+    top_image_path = glue::glue("{save_folder}/{image_sans_ext}_cropped_top.{image_ext}"),
+    bottom_image_path = glue::glue("{save_folder}/{image_sans_ext}_cropped_bottom.{image_ext}")
+  )
+
+  write_sqlite(data = meta, table = "meta", save_file = save_file)
+
+}
+
 # Plot face land marks ----
 #' @export
 plot_landmarks <- function(landmarks=NULL, image, save=NULL,

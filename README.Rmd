@@ -69,7 +69,17 @@ reticulate::conda_install(
   pip = TRUE,
   pip_options = glue::glue("install -r {requirements}")
 )
+
+faceplyr::install_opencv(build = "conda") # Only conda install is supported
+``` 
+
+On UNIX systems there is a helper function (`conda_install_faceplyr`) to bypass the necessity of setting up an environment and the required packages. If you run `R` on Mac or Linux the requirements for this package can mostly be installed via:
+
+```{r conda-install}
+conda_install(pyV="3.8")
 ```
+
+This function should return `TRUE` if all goes smoothly. If all else fails (or you're on Windows) you can install the `Docker` image with from the `Dockerfile` in this repository (TBD: `Dockerfile`).
 
 # Examples
 
@@ -113,6 +123,13 @@ extract_hist_colors(image = image, data_save_folder = "./output")
 # TODO List
 There are a number of "wish list" items that I want to implement in this package. Here is a running list:
 
+- Switch to building openCV from source (for RVision) and link to conda
+  - See `./R/install_opencv_source.R` for details
+  - Remove requirement for `opencv-python`
+  
+- Switch feature saving from `.RDS` to SQLite `.db`
+  - Allows for everything (sans original image) to be stored in a single database that's cross platform and program (e.g., read into python easily)
+
 - Create `Dockerfile` for easy install on host machines
   - Major priority
 
@@ -123,6 +140,10 @@ There are a number of "wish list" items that I want to implement in this package
 - Cleanup `.R` files
 
 - Cleanup `legacy`, `devel`, and unused Python files in `inst`
+
+- Switch from `S3` to `R6`:
+  - `read_landmarks()`? (to add read, write, and plot methods to one class/object)
+  - sct `extract_*` functions? (Could call action and side effects easily)
 
 - ~~Estimate facial roundness (e.g., `faceplyr::extract_roundness`, but see, `faceplyr::calc_roundness`)~~ Complete.
 
