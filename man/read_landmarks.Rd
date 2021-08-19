@@ -8,7 +8,7 @@ read_landmarks(x, ...)
 }
 \arguments{
 \item{x}{Image or file to read. Acceptable files include JPsychomorph .tem files,
-PNG, or JPG images.}
+or file paths to PNG or JPG images.}
 
 \item{...}{Additional arguments to pass (unused).}
 }

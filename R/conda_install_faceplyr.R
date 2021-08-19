@@ -9,20 +9,31 @@ conda_install_faceplyr <- function(pyV="3.8") {
   }
 
   if (!("faceplyr" %in% reticulate::conda_list()$name)) {
-    reticulate::conda_create(envname = "test",
+    reticulate::conda_create(envname = "faceplyr",
                              packages = glue::glue("python={pyV}")
                              )
   }
 
-  install_opencv(build = "conda")
-
-  requirements <- read.system.file("extdata", "requirements.txt", package = "faceplyr")
+  requirements <- system.file("extdata", "requirements.txt", package = "faceplyr")
 
   reticulate::conda_install(
+    packages = NULL,
     envname = "faceplyr",
     pip = TRUE,
     pip_options = glue::glue("install -r {requirements}")
   )
 
-  ROpenCVLite::isOpenCVInstalled()
+  install_opencv_source(batch = TRUE, conda_environment = "faceplyr")
+
+  if (ROpenCVLite::isOpenCVInstalled()) {
+    tmp <- utils::menu(c("yes", "no"), title = "Success! Would you like to install Rvision now?")
+
+    if (tmp == 1) {
+      remotes::install_github("d-bohn/Rvision")
+
+    } else {
+      stop()
+    }
+  }
+
 }
