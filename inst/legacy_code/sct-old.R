@@ -1,3 +1,103 @@
+#' Swap faces between two images
+#'
+#' @param reference Path to image with face to host swapped face from \code{target} image.
+#' @param target Path to image with face to swap to \code{reference} image.
+#' @param convert Logical. Convert returned image to be \code{R} compatible?
+#' Defaults to \code{FALSE} and returns numpy matrix.
+#'
+#' @return Either a numpy matrix or EBImage object.
+#'
+#' @importFrom reticulate import source_python
+#' @importFrom EBImage readImage
+#'
+#' @export
+face_swap <- function(reference, target, convert = FALSE){
+
+  py_file <- system.file("python", "face_warp_full.py", package = "faceplyr")
+  reticulate::source_python(py_file, convert = FALSE)
+
+  img <- out_image(reference = reference, target = target)
+
+  if (convert == TRUE){
+    on.exit(
+      unlink(c(temp))
+    )
+    cv <- reticulate::import('cv2', convert = FALSE)
+
+    temp <- tempfile(fileext = '.png')
+    fp$utils$cv2$imwrite(temp, img)
+
+    out_im <- EBImage::readImage(temp)
+    return(out_im)
+
+  } else {
+    return(img)
+  }
+
+}
+
+#' Crop face from bounding box
+#'
+#' @param image
+#' @param bb
+#' @param savename
+#' @param return_img
+#' @param return_bb
+#' @param wh
+#' @param scale
+#' @param scale_left
+#' @param scale_top
+#' @param scale_right
+#' @param scale_bottom
+#'
+#' @return
+face_crop <- function(image, bb = NULL, savename, return_img = FALSE,
+                      return_bb=FALSE, wh = 200L, scale = TRUE,
+                      scale_left = 0, scale_top=0.5,
+                      scale_right = 0.1, scale_bottom = 0.1) {
+
+  cv <- reticulate::import("cv2")
+
+  py_file <- system.file("python", "bb.py", package = "faceplyr")
+  reticulate::source_python(py_file, convert = FALSE)
+
+  landmarks <- system.file("extdata", "shape_predictor_68_face_landmarks.dat",
+                           package = "faceplyr")
+
+  if (!is.null(bb)) {
+    bb <- bb
+
+  } else {
+    bb <- tf_bb(x = image, landmarks = landmarks, scale_left = 0, scale_top=0.5,
+                scale_right = 0.1, scale_bottom = 0.1)
+  }
+
+  crop_img <- tf_crop(x = image, bb = bb)
+
+  if (scale) {
+    imutils <- reticulate::import("imutils")
+    crop_img <- imutils$resize(crop_img, width = wh)
+  }
+
+  if (return_img) {
+    return(crop_img)
+
+  } else {
+    cv$imwrite(savename, crop_img)
+  }
+
+  if (return_bb) {
+    return(bb)
+  }
+
+  if (return_img & return_bb) {
+    return(list(image = crop_img,
+                bounding_box = bb))
+  }
+}
+
+
+
 #' Extract structure metric from interior of the face
 #'
 #' @param image

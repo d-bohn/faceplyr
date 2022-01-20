@@ -129,6 +129,8 @@ There are a number of "wish list" items that I want to implement in this package
   
 - ~~Switch feature saving from `.RDS` to SQLite `.db`~~ Complete 03/23/21
   - ~~Allows for everything (sans actual images) to be stored in a single database that's cross platform and program (e.g., read into python easily)~~
+  
+- Option to store and retrieve images stored as base64 in SQLite db
 
 - Create `Dockerfile` for easy install on host machines
   - Major priority

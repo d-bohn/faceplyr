@@ -4,7 +4,7 @@
 \alias{face_hist}
 \title{Extract color histogram from face image}
 \usage{
-face_hist(img, shape = c(8, 8, 8), colorspace = "rgb")
+face_hist(img, shape = c(8L, 8L, 8L), colorspace = "rgb")
 }
 \arguments{
 \item{img}{Image to be analyzed (png or jpg).}

@@ -6,7 +6,6 @@
 \usage{
 face_mask(
   image,
-  bb = NULL,
   crop = TRUE,
   savename = NULL,
   return_img = FALSE,

@@ -1,3 +1,40 @@
+# Startup helpers ----
+m1arm_startup_helper <- function() {
+  brew_exists <-
+    ifelse(any(
+      system2("/opt/homebrew/bin/brew", args = "--version",
+              stdout = TRUE, stderr = FALSE) == ""),
+    FALSE, TRUE)
+
+  miniforge_exists_cask <- dir.exists("/opt/homebrew/Caskroom/miniforge")
+  miniforge_exists_opt <- dir.exists("/opt/")
+
+  if (!miniforge_exists_cask | !miniforge_exists_opt) {
+    warning("Please make sure brew/miniforge is installed.")
+  }
+
+  if (miniforge_exists_cask & !miniforge_exists_opt) {
+    file.symlink("/opt/homebrew/Caskroom/miniforge", "/opt/miniforge")
+    message("miniforge symlinked to /opt/miniforge for reticulate.")
+  }
+
+  if (miniforge_exists_opt) {
+    if (("faceplyr" %in% reticulate::conda_list()$name)) {
+      Sys.unsetenv("RETICULATE_PYTHON")
+
+      reticulate::use_condaenv("faceplyr", required = TRUE)
+
+      path <- system.file("python", package = "faceplyr", mustWork = TRUE)
+      fp <<- reticulate::import_from_path(
+        "faceplyr",
+        path = path,
+        convert = FALSE
+      )
+    }
+  }
+
+}
+
 # SCT helpers ----
 #' @export
 col_orange <- cli::make_ansi_style("orange")
@@ -9,28 +46,27 @@ emo_labels <- function() {
   paste(emo_labels1, emo_labels2, sep = "|")
 }
 
-#' @export
-remove_background <- function(image, savename, return_img = FALSE) {
-  py_file <- system.file("python", "face_mask.py", package = "faceplyr")
-  reticulate::source_python(py_file, convert = FALSE)
-
-  masked_face <- crop_background(image)
-
-  if (tools::file_ext(savename) != "png") {
-    stop ("transparency requires saving image as a PNG")
-
-  }
-
-  masked_face <- remove_background(masked_face)
-
-  if (return_img) {
-    return(masked_face)
-
-  } else {
-    cv <- reticulate::import("cv2")
-    cv$imwrite(savename, masked_face)
-  }
-}
+# remove_background <- function(image, savename, return_img = FALSE) {
+#   # py_file <- system.file("python", "face_mask.py", package = "faceplyr")
+#   # reticulate::source_python(py_file, convert = FALSE)
+#
+#   masked_face <- fp$utils$p_crop_background(image)
+#
+#   if (tools::file_ext(savename) != "png") {
+#     stop ("transparency requires saving image as a PNG")
+#
+#   }
+#
+#   masked_face <- p_remove_background(masked_face)
+#
+#   if (return_img) {
+#     return(masked_face)
+#
+#   } else {
+#     cv <- reticulate::import("cv2")
+#     cv$imwrite(savename, masked_face)
+#   }
+# }
 
 #' @export
 extract_vars <- function(image, extract_emotion = FALSE, data_save_folder){

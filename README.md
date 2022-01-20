@@ -109,7 +109,22 @@ reticulate::conda_install(
   pip = TRUE,
   pip_options = glue::glue("install -r {requirements}")
 )
+
+faceplyr::install_opencv() # Only conda install is supported and only tested on Mac
 ```
+
+On UNIX systems there is a helper function (`conda_install_faceplyr`) to
+bypass the necessity of setting up an environment and the required
+packages. If you run `R` on Mac or Linux the requirements for this
+package can mostly be installed via:
+
+``` r
+conda_install_faceplyr(pyV="3.8")
+```
+
+This function should return `TRUE` if all goes smoothly. If all else
+fails (or you’re on Windows) you can install the `Docker` image from the
+`Dockerfile` in this repository (TBD: `Dockerfile`).
 
 # Examples
 
@@ -178,6 +193,22 @@ extract_hist_colors(image = image, data_save_folder = "./output")
 There are a number of “wish list” items that I want to implement in this
 package. Here is a running list:
 
+-   Switch to building openCV from source (for RVision) and link to
+    conda
+
+    -   See `./R/install_opencv_source.R` for details (can build from
+        source, but trouble linking it to conda env)
+    -   Remove requirement for `opencv-python`
+
+-   ~~Switch feature saving from `.RDS` to SQLite `.db`~~ Complete
+    03/23/21
+
+    -   ~~Allows for everything (sans actual images) to be stored in a
+        single database that’s cross platform and program (e.g., read
+        into python easily)~~
+
+-   Option to store and retrieve images stored as base64 in SQLite db
+
 -   Create `Dockerfile` for easy install on host machines
 
     -   Major priority
@@ -190,10 +221,22 @@ package. Here is a running list:
 
 -   Cleanup `.R` files
 
+    -   ~~Simplify `read_landmarks()`~~ Complete 03/25/21
+
 -   Cleanup `legacy`, `devel`, and unused Python files in `inst`
 
--   ~~Estimate facial roundness (e.g., `faceplyr::extract_roundness`,
-    but see, `faceplyr::calc_roundness`)~~ Complete.
+-   Switch from `S3` to `R6`/`R7`?:
 
--   ~~Estimate facial angularity (e.g.,
-    `faceplyr::extract_angularity`)~~ Complete.
+    -   `read_landmarks()`? (to add read, write, and plot methods to one
+        class/object)
+    -   sct `extract_*` functions? (Could call action and side effects
+        easily)
+
+-   Estimate new features/metrics
+
+    -   ~~Facial roundness (e.g., `faceplyr::extract_roundness`, but
+        see, `faceplyr::calc_roundness`)~~ Complete 02/xx/21
+    -   ~~Facial angularity (e.g., `faceplyr::extract_angularity`)~~
+        Complete 02/xx/21
+    -   Face wrinkles/skin marks
+    -   Expansion/Constriction

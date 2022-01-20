@@ -21,3 +21,4 @@ def get_landmarks(im, PREDICTOR_PATH):
         # raise NoFaces
         return None
     return numpy.matrix([[p.x, p.y] for p in predictor(img, rects[0]).parts()])
+

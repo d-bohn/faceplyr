@@ -2,6 +2,15 @@
 #' @export
 calc_expanse_constrict <- function(image = NULL, compare_to = NULL) {
 
+  if (is.null(comapre_to)) {
+
+  } else if (compare_to == "default") {
+
+
+  } else {
+    stop("Not implemented yet.")
+  }
+
 
 }
 

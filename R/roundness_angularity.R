@@ -128,19 +128,21 @@ fit_ellipse <- function(image, landmarks = NULL,
   }
 
 
-  ellipse_points <- landmarks %>%
-    as_tibble(.) %>%
-    filter(., point %in% (point_sel))
+  ellipse_points <- landmarks |>
+    tibble::as_tibble() |>
+    dplyr::filter(point %in% (point_sel))
 
   ellipse_pts <- ellipse_points[c('x','y')]
 
   ellipDirect <- switch(fit,
-                        direct = EllipseDirectFit(as.matrix(ellipse_pts)),
-                        taubin = EllipseFitByTaubin(as.matrix(ellipse_pts))
+                        direct = conicfit::EllipseDirectFit(as.matrix(ellipse_pts)),
+                        taubin = conicfit::EllipseFitByTaubin(as.matrix(ellipse_pts))
   )
 
-  ellipDirectG <- AtoG(ellipDirect)$ParG # Center (x,y), axis a, axis b, angle
-  ellipse_g <- calculateEllipse(ellipDirectG[1], ellipDirectG[2], ellipDirectG[3], ellipDirectG[4], 180/pi*ellipDirectG[5])
+  ellipDirectG <- conicfit::AtoG(ellipDirect)$ParG # Center (x,y), axis a, axis b, angle
+  ellipse_g <- conicfit::calculateEllipse(ellipDirectG[1], ellipDirectG[2],
+                                          ellipDirectG[3], ellipDirectG[4],
+                                          180/pi*ellipDirectG[5])
 
   return(list(
     ellipse_geometry = ellipDirectG,
